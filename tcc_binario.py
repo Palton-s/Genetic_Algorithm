@@ -17,6 +17,7 @@ def gera_populacao(n_variaveis, n_individuos, n_bits):
         X.append(individuo)
     return X
 
+
 def gera_individuo(n_bits, n_variaveis):
     individuo = []
     for i in range(n_variaveis):
@@ -26,22 +27,27 @@ def gera_individuo(n_bits, n_variaveis):
         individuo.append(variavel)
     return individuo
 
+
 def traduz_individuo(individuo):
     # parameters
     n_bits = len(individuo[0])
-    max_bits = 2**n_bits-1
+    max_bits = 2**(n_bits)-1
     n_variaveis = len(individuo)
     variaveis = []
     # foreach variavel
     for i in range(n_variaveis):
-        variavel = 0
-        # foreach bit
+        # convert list of bits to decimal
+        decimal = 0
         for j in range(n_bits):
-            variavel = variavel + individuo[i][j]*(2**(n_bits-j-1))
-        variaveis.append(variavel*10/max_bits)
+            decimal = decimal + individuo[i][j]*(2**(n_bits-1-j))
+        # convert decimal to real value between -10 and 10
+        variavel = (decimal/max_bits)*20-10
+        variaveis.append(variavel)
+
     return variaveis
 
 # function for evaluate the population X
+
 
 def evaluate(X):
     Y = np.zeros(len(X))
@@ -69,14 +75,15 @@ def evaluate(X):
         X_traduz = traduz_individuo(X[int(i)])
         x = X_traduz[0]
         y = X_traduz[1]
+
         n = 9
         s2 = 0.15
         r = np.sqrt((x)**2 + (y)**2)
         #f = (np.cos(n*math.pi*r)**2)*np.exp(-r**2/s2)
         f = np.exp(-r**2)
         Y[i] = f
-    Y = Y - np.min(Y)
     return Y
+
 
 def order(X, Y):
     # order
@@ -93,6 +100,7 @@ def order(X, Y):
                 X[j] = aux
     return X, Y
 
+
 def Print(X, Y):
     # best
     best = np.argmax(Y)
@@ -106,8 +114,6 @@ def Print(X, Y):
     print(X)
     # print fitness
     print(Y)
-
-
 
 
 def Track(Y):
@@ -126,40 +132,24 @@ def Track(Y):
     return ProbTrack
 
 
-def Selection(X, ProbTrack):
-    N = len(X)
-    NV = len(X[0])
-    # sum of all probabilities
-    Sum = 0.0
-    for i in range(len(ProbTrack)):
-        Sum = Sum + ProbTrack[i]
+def roleta(X):
+    avaliacoes = evaluate(X)
+    soma = sum(avaliacoes)
+    sorteio = random.uniform(0, soma)
+    soma_anterior = 0
+    for i in range(len(X)):
+        soma_anterior += avaliacoes[i]
+        if soma_anterior > sorteio:
+            return i
 
-    # reproduction
-    Reproducer = []
-    # indices of the chosen individuals
-    Indices = []
-    # sum the probabilities into the value of R
-    for k in range(int(N/2)):
-        # random number from 0 to Sum
-        R = random.uniform(0, Sum)
-        # auxiliar for sum
-        Aux = 0.0
-        for i in range(len(ProbTrack)):
-            Aux = Aux + ProbTrack[i]
-            if R < Aux:
-                # if the index is not already in the array
-                if i not in Indices:
-                    # add the index
-                    Indices.append(i)
-                    # add the individual
-                    Reproducer.append(X[i])
-                    break
-                else:
-                    Indices.append(i)
-                    Reproducer.append(X[i-1])
-                    break
 
-    return Reproducer
+def Selection(X):
+    # selection
+    X_new = []
+    for i in range(len(X)):
+        X_new.append(X[roleta(X)])
+    return X_new
+
 
 def Reproducao(selection):
     # get the number of individuos
@@ -174,30 +164,42 @@ def Reproducao(selection):
         p1 = selection[i]
         p2 = selection[i+1]
         # create the children
-        c1 = []
-        c2 = []
+        filho_1 = []
+        filho_2 = []
         for k in range(n_variaveis):
-            # get the first half bits of the parents
-            bits_1 = []
-            bits_2 = []
-            for j in range(int(n_bits/2)):
-                bits_1.append(p1[k][j])
-                bits_2.append(p2[k][j])
-            # get the second half bits of the parents
-            for j in range(int(n_bits/2), n_bits):
-                bits_1.append(p2[k][j])
-                bits_2.append(p1[k][j])
+            variavel_filho_1 = []
+            variavel_filho_2 = []
+            # separe each parent in three parts
+            p1_part1 = p1[k][0:int(n_bits/3)]
+            p1_part2 = p1[k][int(n_bits/3):int(2*n_bits/3)]
+            p1_part3 = p1[k][int(2*n_bits/3):n_bits]
+            p2_part1 = p2[k][0:int(n_bits/3)]
+            p2_part2 = p2[k][int(n_bits/3):int(2*n_bits/3)]
+            p2_part3 = p2[k][int(2*n_bits/3):n_bits]
+            c1 = []
+            c2 = []
+            # create the children with three parts
+            for j in range(n_bits):
+                if j < int(n_bits/3):
+                    c1.append(p1_part1[j])
+                    c2.append(p2_part1[j])
+                elif j < int(2*n_bits/3):
+                    c1.append(p1_part2[j-int(n_bits/3)])
+                    c2.append(p2_part2[j-int(n_bits/3)])
+                else:
+                    c1.append(p1_part3[j-int(2*n_bits/3)])
+                    c2.append(p2_part3[j-int(2*n_bits/3)])
+            # append the children to the new population
+            filho_1.append(c1)
+            filho_2.append(c2)
+        
 
-            c1.append(bits_1)
-            c2.append(bits_2)
-        new_populacao.append(c1)
-        new_populacao.append(c2)
+
+        new_populacao.append(filho_1)
+        new_populacao.append(filho_2)
 
     return new_populacao
 
-
-        
-        
 
 def Deviation(X):
     # parameters
@@ -236,12 +238,14 @@ def Mutation(X, percentage):
             W = np.random.uniform(0, 1)
             Auxiliary = W*N
             ChosenMutation = int(Auxiliary)
-            R = random.randint(0,n_bits-1)
-            if X[ChosenMutation][j][R] == 0:
-                X[ChosenMutation][j][R] = 1
-            else:
-                X[ChosenMutation][j][R] = 0
+            for k in range(8):
+                R = random.randint(0, n_bits-1)
+                if X[ChosenMutation][j][R] == 0:
+                    X[ChosenMutation][j][R] = 1
+                else:
+                    X[ChosenMutation][j][R] = 0
     return X
+
 
 def Gaussian(X, Reproducer, D):
     # for the variables
@@ -296,21 +300,24 @@ def GA(NV, N):
     n_geracoes = 250
 
     for i in range(n_geracoes):
-
         # evaluate
         Y = evaluate(X)
         # order
         X, Y = order(X, Y)
-        # probability track
-        ProbTrack = Track(Y)
-        selection = Selection(X, ProbTrack)
-        Sons = Reproducao(selection)
-
-        X = Attribution(X, Sons)
-        X = Mutation(X, 0)
 
         print(Y)
+        x_trad = []
+        for i in range(len(X)):
+            x_trad.append(traduz_individuo(X[i]))
+        print(x_trad)
 
-GA(2, 12)
+        selection = Selection(X)
+        Sons = Reproducao(selection)
+        X = Attribution(X, Sons)
+        X = Mutation(X, 0.5)
+
+
+
+GA(2, 4)
 
 # elitismo de no máximo 10% da população
