@@ -41,7 +41,7 @@ def traduz_individuo(individuo):
         for j in range(n_bits):
             decimal = decimal + individuo[i][j]*(2**(n_bits-1-j))
         # convert decimal to real value between -2 and 2
-        
+        variavel = decimal/max_bits*4-2
         variaveis.append(variavel)
 
     return variaveis
@@ -286,18 +286,18 @@ def Attribution(X, Sons):
     N = len(X)
     # attribution
     New_X = []
-    for i in range(len(Sons)):
+    for i in range(int(len(Sons)/2)):
         New_X.append(Sons[i])
-    for i in range(len(Sons), N):
+    for i in range(int(len(Sons)/2), N):
         New_X.append(X[i])
     return New_X
 
 
 def GA(NV, N):
     # population
-    n_bits = 9
+    n_bits = 12
     X = gera_populacao(NV, N, n_bits)
-    n_geracoes = 250
+    n_geracoes = 2500
 
     for i in range(n_geracoes):
         # evaluate
@@ -314,10 +314,10 @@ def GA(NV, N):
         selection = Selection(X)
         Sons = Reproducao(selection)
         X = Attribution(X, Sons)
-        X = Mutation(X, 0.5)
+        X = Mutation(X, 0.01)
 
 
 
-GA(2, 4)
+GA(2, 8)
 
 # elitismo de no máximo 10% da população
