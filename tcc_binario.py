@@ -40,8 +40,8 @@ def traduz_individuo(individuo):
         decimal = 0
         for j in range(n_bits):
             decimal = decimal + individuo[i][j]*(2**(n_bits-1-j))
-        # convert decimal to real value between -10 and 10
-        variavel = (decimal/max_bits)*20-10
+        # convert decimal to real value between -2 and 2
+        
         variaveis.append(variavel)
 
     return variaveis
