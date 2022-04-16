@@ -4,6 +4,8 @@ import numpy as np
 import colorsys
 import math
 
+import matplotlib.pyplot as plt
+
 
 # function for generating the population of a GA
 def PopulationGenerator(NV, N):
@@ -12,7 +14,7 @@ def PopulationGenerator(NV, N):
     for i in range(N):
         variaveis = []
         for j in range(NV):
-            variaveis.append(random.uniform(-10, 10))
+            variaveis.append(random.uniform(-1, 1))
         X.append(variaveis)
     return X
 
@@ -27,7 +29,7 @@ def evaluate(X):
     for i in range(individuos):
         sum = 0
         # Teste P1
-        
+
         """n = 9
         x = X[0, i]
         y = X[1, i]
@@ -36,7 +38,7 @@ def evaluate(X):
         f = (np.cos(n*math.pi*r)**2)*np.exp(-r**2/s2)
         Y[i] = f"""
         # teste P2
-        
+
         """x = X[0, i]
         y = X[1, i]
         r1 = np.sqrt((X[0, i]-0.5)**2 + (X[1, i]-0.5)**2)
@@ -44,16 +46,16 @@ def evaluate(X):
         f = 0.8*np.exp(-(r1**2)/(0.3**2))+0.879008*np.exp(-(r2**2)/(0.03**2))"""
         # teste P3
         x = X[i][0]
-        y = X[i][0]
+        y = X[i][1]
         #y = X[i][1]
         #z = X[i][2]
         #w = X[i][3]
 
         n = 9
         s2 = 0.15
-        r = np.sqrt((x-0.5)**2 + (y-0.5)**2)
+        r = (x-0.5)**2 + (y-0.5)**2
         #f = (np.cos(n*math.pi*r)**2)*np.exp(-r**2/s2)
-        f = np.exp(-r**2)
+        f = np.exp(-r)
 
         Y.append(f)
 
@@ -64,7 +66,7 @@ def order(X, Y):
     # join X and Y in an array
     x_ev = []
     for i in range(len(X)):
-        x_ev.append([Y[i],X[i]])
+        x_ev.append([Y[i], X[i]])
     # order x_env by fitness
     x_ev.sort(key=lambda x: x[0], reverse=False)
     # split x_env in X and Y
@@ -114,7 +116,7 @@ def Track(Y):
     for i in range(len(Y)):
         Probability[i] = Y[i]/Sum
     Auxiliary = 0.0
-    ProbTrack[0] = 0.0
+    ProbTrack[0] = 0
     for i in range(1, len(Y)):
         ProbTrack[i] = Auxiliary + Probability[i-1]
         Auxiliary = ProbTrack[i]
@@ -154,7 +156,6 @@ def Selection(X, ProbTrack):
                     Indices.append(i-1)
                     Reproducer.append(X[i-1])
                     break
-
     return Reproducer
 
 
@@ -188,24 +189,26 @@ def Mutation(X, percentage, intensity):
     # read parameters
     M = int(N*percentage)
     # mutation
-    for I in range(N-M, N):
+    for I in range(M):
         # for the variables
         W = np.random.uniform(0, 1)
         Auxiliary = W*N
         ChosenMutation = int(Auxiliary)
+        #print("test de mutação")
         for j in range(NV):
             P = np.random.uniform(0, 1)
-            R = (intensity)*(random.uniform(0, 1))
+            R = (intensity)
             aux = 0
             if P >= 0.5:
                 aux = 1-R
             else:
                 aux = 1+R
             X[ChosenMutation][j] = X[ChosenMutation][j]*aux
+            #print("test de mutação")
     return X
 
 
-def Gaussian(X, Reproducer, D):
+def Gaussian_fail(X, Reproducer, D):
     # for the variables
     NV = len(X[0])
     N = len(X)
@@ -215,7 +218,7 @@ def Gaussian(X, Reproducer, D):
         Walker1 = Reproducer[K]
         Walker2 = Reproducer[K]
         # for the individuals
-        for L in range(NV):    
+        for L in range(NV):
             Step = D[L]/(2*np.sqrt(N))
             Nsteps = 100
             for I in range(Nsteps):
@@ -231,12 +234,31 @@ def Gaussian(X, Reproducer, D):
                 if W <= 0.5:
                     Walker2[L] = Walker2[L] + Q
                 else:
-                    Walker2[L] = Walker2[L] - Q 
+                    Walker2[L] = Walker2[L] - Q
             Son1.append(Walker1)
             Son2.append(Walker2)
 
     return Son1, Son2
 
+def decimal_to_binary(number, range, n):
+    # convert decimal to binary
+    aux = ((number + range/2)*(2**n))/range
+    aux_int = int(aux)
+    #convert to binary
+    binary = bin(aux_int)
+    # remove the '0b'
+    binary = binary[2:]
+    print(binary)
+
+
+
+def Gaussian(X):
+    # for the variables
+    NV = len(X[0])
+    N = len(X)
+    Son1 = []
+    Son2 = []
+    for K in range(0, int(N/2)):
 
 def Attribution(X, Son1, Son2, Elite, MM):
     # for the variables
@@ -250,7 +272,7 @@ def Attribution(X, Son1, Son2, Elite, MM):
         X[K] = Son2[K]
 
     for J in range(N-MM, N):
-        
+
         X[J] = Elite[J-N+MM]
 
     return X
@@ -260,11 +282,20 @@ def GA(NV, N):
     # population
     X = PopulationGenerator(NV, N)
     # number of Elite individuals
-    MM = int(N*0.01)+1
-    Elite = np.zeros((MM, NV))
-    n_geracoes = 50
+    MM = int(N*0.5)+1
+    Elite = []
+    n_geracoes = 100
 
     dados_relatorio = []
+
+    dado_relatorio = []
+    dado_relatorio.append("Geração")
+    dado_relatorio.append("Média das avaliações")
+    dado_relatorio.append("Avaliação do melhor indivíduo")
+    dado_relatorio.append("Avaliação do pior indivíduo")
+    dado_relatorio.append("Valor do pior indivíduo")
+
+    dados_relatorio.append(dado_relatorio)
 
     for geracao in range(n_geracoes):
         dado_relatorio = []
@@ -273,42 +304,55 @@ def GA(NV, N):
         Y = evaluate(X)
         # order
         X, Y = order(X, Y)
+
+        result = []
+        for i in range(len(X)):
+            result.append([X[i][0], X[i][1], Y[i]])
+        print("X")
+        print(result)
+        print("------------------")
+
         # Elite is the last 0.01% of the population
         for I in range(N-MM, N):
-            Elite[I-N+MM] = X[I]
+            Elite.append(X[I])
         # make all evaluations be positive
-        Y = Y - np.min(Y)
-        
+        Y = Y/max(Y)
+
         # probability track
         ProbTrack = Track(Y)
         D = Deviation(X)
         Reproducer = Selection(X, ProbTrack)
         Son1, Son2 = Gaussian(X, Reproducer, D)
         X = Attribution(X, Son1, Son2, Elite, MM)
-        X = Mutation(X, 0.1, 0.05)
+        #X = Mutation(X, 0, 0)
 
-        print(geracao)
-        print("X")
+        #print(geracao)
+        #print("X")
         # print last Elite
-        print(X[N-1])
+        #print(Elite[MM-1], " ", Y[N-MM])
+        #print(Elite[MM-2], " ", Y[N-MM-1])
+        #print(Elite[MM-3],  " ", Y[N-MM-2])
         # generation
         dado_relatorio.append(geracao)
         # mean of evaluates
-        dado_relatorio.append(np.mean(Y))   
+        dado_relatorio.append(np.mean(Y))
         # bigger value of evaluate
         dado_relatorio.append(np.max(Y))
+        dado_relatorio.append(np.min(Y))
+        dado_relatorio.append(Elite[MM-1])
+        dados_relatorio.append(dado_relatorio)
+        print(geracao)
+        
         
 
-        dados_relatorio.append(dado_relatorio)
-
-    
-    
     return dados_relatorio
 
 
-dados = GA(2, 100)
+
+
+dados = GA(2, 30)
 
 for i in range(len(dados)):
     print(dados[i])
-    
-# plot dados 
+
+# plot dados

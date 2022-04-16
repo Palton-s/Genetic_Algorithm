@@ -316,8 +316,6 @@ def GA(NV, N):
         X = Attribution(X, Sons)
         X = Mutation(X, 0.01)
 
-
-
 GA(2, 8)
 
 # elitismo de no máximo 10% da população
