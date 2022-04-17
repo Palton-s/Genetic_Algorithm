@@ -1,77 +1,73 @@
 import numpy as np
 import random
-import colorsys
-
 
 def decimal_to_binary(number, alcance, n):
     init = alcance[0]
     final = alcance[1]
-    # convert decimal to binary
+    # convertendo o valor decimal para binario
     aux = ((number-init/2)*(2**n-1))/final
     aux_int = int(aux)
-    # convert to binary
     binary = bin(aux_int)
-    # remove the '0b'
+    # remove o 0b da string
     binary = binary[2:]
-    # complete with n zeros
+    # completa com zeros a esquerda
     binary = binary.zfill(n)
+    # retorna o cromossomo em binario
     return binary
 
-# make the reverse process
-
-
 def binary_to_decimal(binary, alcance, n):
+    # converte o cromossomo de binario para decimal
     init = alcance[0]
     final = alcance[1]
-    # convert binary to decimal
     aux = int(binary, 2)
-    # convert to decimal
+    # converte o valor inteiro para o intervalo de valores do cromossomo
     decimal = (aux*final)/(2**n-1)+init/2
+    # retorna o valor decimal
     return decimal
 
-def mutacao_cromossomo(individuo, intensidade,alcance, n_bits):
-    binario = decimal_to_binary(individuo, alcance, n_bits)
+def mutacao_cromossomo_binario(binario, intensidade):
+    # percorre cada bit do cromossomo
     for j in range(len(binario)):
+        # dada a probabilidade de mutação, altera o bit de 0 para 1 ou de 1 para 0
         if random.uniform(0, 1) < intensidade:
             if binario[j] == '1':
                 binario = binario[:j] + '0' + binario[j+1:]
             else:
                 binario = binario[:j] + '1' + binario[j+1:]
-    individuo = binary_to_decimal(binario, alcance, n_bits)
-    return binario, individuo
+    # retorna o cromossomo binário mutado
+    return binario
 
+def crossover(cromossomo1, cromossomo2, n_cortes):
+    # pega o numero de bits do cromossomo
+    n_bits = len(cromossomo1)
+    # escolhe aleatoriamente os cortes
+    crossover_points = random.sample(range(0, n_bits), n_cortes+1)
+    # ordena os cortes
+    crossover_points.sort()
+    # transforma cromossomos em um list de bits
+    arr_cromossomo1 = list(cromossomo1)
+    arr_cromossomo2 = list(cromossomo2)
+    # executa o crossover
+    for i in range(len(crossover_points)-1):
+        # pega os bits do ponto de corte
+        if i % 2 == 0:
+            # se for par, pega o bit do pai 1
+            # e coloca no filho 1
+            # e pega o bit do pai 2
+            # e coloca no filho 2
+            aux = arr_cromossomo1[crossover_points[i]:crossover_points[i+1]]
+            arr_cromossomo1[crossover_points[i]:crossover_points[i+1]] = arr_cromossomo2[crossover_points[i]:crossover_points[i+1]]
+            arr_cromossomo2[crossover_points[i]:crossover_points[i+1]] = aux
+    # une a lista de bits em uma string
+    cromossomo1 = ''.join(arr_cromossomo1)
+    cromossomo2 = ''.join(arr_cromossomo2)
+    # retorna os cromossomos filhos
+    return cromossomo1, cromossomo2
 
-val_1 = -2
-val_2 = 5
-n_bits = 16
+cromossomo1 = "11111111111111111111111111111111"
+cromossomo2 = "00000000000000000000000000000000"
 
-alcance = 1000
-bin_1 = decimal_to_binary(val_1, [-50, 50], n_bits)
-bin_2 = decimal_to_binary(val_2, [-50, 50], n_bits)
-print(bin_1)
-print(val_1)
-print(bin_2)
-print(val_2)
-
-part_1_1 = bin_1[0:4]
-part_1_2 = bin_1[4:8]
-part_1_3 = bin_1[8:12]
-part_1_4 = bin_1[12:16]
-part_2_1 = bin_2[0:4]
-part_2_2 = bin_2[4:8]
-part_2_3 = bin_2[8:12]
-part_2_4 = bin_2[12:16]
-
-son_1 = part_1_1 + part_2_2 + part_1_3 + part_2_4
-son_2 = part_2_1 + part_1_2 + part_2_3 + part_1_4
-son_1_decimal = binary_to_decimal(son_1, [-50, 50], n_bits)
-son_2_decimal = binary_to_decimal(son_2, [-50, 50], n_bits)
-print("son_1: ", son_1, "son_1_decimal: ", son_1_decimal)
-print("son_2: ", son_2, "son_2_decimal: ", son_2_decimal)
-
-son1_binario_mutado, son1_mutado = mutacao_cromossomo(son_1_decimal, 0.1, [-50, 50], n_bits)
-print("son1_mutado: ", son1_binario_mutado, "son1_mutado: ", son1_mutado)
-son2_binario_mutado, son2_mutado = mutacao_cromossomo(son_2_decimal, 0.1, [-50, 50], n_bits)
-print("son2_mutado: ", son2_binario_mutado, "son2_mutado: ", son2_mutado)
-
+mutado = mutacao_cromossomo_binario(cromossomo1, 0.1)
+print(cromossomo1)
+print(mutado)
 
