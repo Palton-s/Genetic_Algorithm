@@ -25,6 +25,7 @@ def avaliacao(X):
         # calcula a exponencial
         #avaliacao = np.exp(-raio**2)
         s2 = 0.15
-        avaliacao = (np.cos(4*np.pi*raio)**2)*np.exp(-raio**2/s2)
+        #avaliacao = (np.cos(4*np.pi*raio)**2)*np.exp(-raio**2/s2)
+        avaliacao = (np.cos(3*np.pi*raio)**2)*np.exp(-raio**2)
         Y.append(avaliacao)
     return Y
