@@ -12,7 +12,7 @@ def mutacao_cromossomo_binario(binario, intensidade):
     # retorna o cromossomo binário mutado
     return binario
 
-def mutacao_populacao(X, taxa_de_mutacao, intensidade_da_mutacao):
+def mut_pop(X, taxa_de_mutacao, intensidade_da_mutacao):
     # para cada indivíduo
     for i in range(len(X)):
         # para cada variavel
