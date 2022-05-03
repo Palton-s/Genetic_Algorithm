@@ -26,6 +26,12 @@ def avaliacao(X):
         #avaliacao = np.exp(-raio**2)
         s2 = 0.15
         #avaliacao = (np.cos(4*np.pi*raio)**2)*np.exp(-raio**2/s2)
-        avaliacao = (np.cos(3*np.pi*raio)**2)*np.exp(-raio**2)
+        #avaliacao = (np.cos(3*np.pi*raio)**2)*np.exp(-raio**2)
+        x = X[i][0]
+        y = X[i][1]
+        r1 = (x)**2 + (y)**2
+        r2 = (x-0.3)**2 + (y-0.3)**2
+        avaliacao = 0.8*np.exp(-(r1 )/(0.3**2))+1*np.exp(-(r2 )/(0.03**2))
+        #avaliacao = np.exp(-raio**2)
         Y.append(avaliacao)
     return Y

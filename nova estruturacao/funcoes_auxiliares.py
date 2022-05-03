@@ -64,6 +64,8 @@ def atribui(X, filhos, elite):
     X = filhos
     # resgata o número de indivíduos elite
     n_elite = len(elite)    
-    #substitui os elite na população
-    X[:int(n_elite)] = elite
+    #substitui os elite na população nos últimos n_elite indivíduos
+    for i in range(n_elite):
+        X[-i] = elite[i]
+
     return X

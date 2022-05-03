@@ -66,4 +66,46 @@ def cruza_populacao(melhores, n_cortes):
 populacao = [[[1,1,1,1,1,1,1,1]], [[0,0,0,0,0,0,0,0]]]
 cruzamento = cruza_populacao(populacao, 2)
 
+def roleta(X,Y,percent_individuos):
+    # pega a quantidade de indivíduos
+    n_individuos = len(X)
+    # pega a quantidade de indivíduos que serão selecionados
+    n_individuos_selecionados = int(percent_individuos * n_individuos)
+    # inicia a população de filhos
+    filhos = []
+    roleta_vals = []
+    # para cada indivíduo da população adiciona uma fração da roleta proportional ao seu fitness
+    for i in range(n_individuos):
+        roleta_vals.append(Y[i]/sum(Y))
+    # soma todas as frações
+    soma_roleta = sum(roleta_vals)
+    # para cada indivíduo da população
+    for i in range(n_individuos):
+        # pega a fração da roleta
+        roleta_vals[i] = 360*roleta_vals[i]/soma_roleta
+    # para cada indivíduo a ser selecionado
+    for i in range(n_individuos_selecionados):
+        # pega o valor da roleta
+        valor_roleta = random.randint(0,360)
+        # inicia uma soma
+        soma = 0
+        # pega o indivíduo que está na posição da roleta
+        for j in range(n_individuos):
+            soma += roleta_vals[j]
+            selecionou = False
+            if soma >= valor_roleta:
+                # adiciona o indivíduo na população de filhos
+                selecionou = True
+                filhos.append(X[j])
+                break
+        if not selecionou:
+            filhos.append(X[n_individuos-1])
+    # retorna a população de filhos
+    return filhos
+
+    
+
+
+
+
 print(cruzamento)
