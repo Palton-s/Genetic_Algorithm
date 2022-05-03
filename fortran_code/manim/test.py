@@ -1,18 +1,16 @@
 import random
+import numpy as np
 
-random_spaces = random.sample(range(0, 16), 2)
-mutation_form = []
-# random_spaces = [0, 4, 8]
-# mutation form = [0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0]
-for k in random_spaces:
-    val = 0
-    aux = 0
-    for i in range(aux, k):
-        mutation_form.append(val)
-    val = val + 1
-    aux += i
+setss = []
+
+for i in range(16):
+    setss.append([np.round(random.uniform(-1, 1), 2),np.round(random.uniform(-1, 1), 2)])
+
+avaliacoes = []
+for i in range(16):
+    avaliacoes.append(np.round(np.exp(-np.linalg.norm(setss[i])), 2))
+
+print(setss)
+print(avaliacoes)
+
     
-
-        
-
-print(mutation_form)
