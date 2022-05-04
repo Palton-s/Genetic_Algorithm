@@ -1,0 +1,25 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=latex 2021.8.8)  3 MAY 2022 21:01
+entering extended mode
+**./media/Tex/e214ca17d62c7bf0.tex
+(media/Tex/e214ca17d62c7bf0.tex
+LaTeX2e <2021-06-01>
+L3 programming layer <2021-06-01>
+(C:\Users\palto\AppData\Local\Programs\MiKTeX\tex/latex/standalone\standalone.c
+ls
+Document Class: standalone 2018/03/26 v1.3a Class to compile TeX sub-files stan
+dalone
+! Interruption.
+<argument> \__file_size:n {shellesc.sty}
+                                        
+l.72     }
+           
+Here is how much of TeX's memory you used:
+ 54 strings out of 478865
+ 1288 string characters out of 2848687
+ 293973 words of memory out of 3000000
+ 18071 multiletter control sequences out of 15000+600000
+ 403430 words of font info for 27 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 40i,0n,47p,115b,18s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+No pages of output.
