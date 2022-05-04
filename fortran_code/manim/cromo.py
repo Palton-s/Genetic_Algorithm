@@ -137,3 +137,5 @@ def binary_to_range(binary_list):
     innt = sum(decimal_list)
     rangess = [-2,2]
     return round((innt/(2**len(binary_list)))*(rangess[1]-rangess[0]) + rangess[0], 2)
+
+
