@@ -1,10 +1,10 @@
 import random
 
-def cria_populacao(N, precisao):
+def cria_populacao(precisao):
     # inicia a populacao
     X = []
     # para cada indivíduos
-    for i in range(N):
-        X.append(random.randint(0,precisao))
+    for i in range(precisao):
+        X.append(i)
     # retorna a populacao
     return X

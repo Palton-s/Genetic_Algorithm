@@ -1,0 +1,6 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/xampp/htdocs/Genetic_Algorithm/fortran_code/manim/media/videos/test/480p15/partial_movie_files/PointMovingOnShapes/3163782288_1795170954_1559485915.mp4'
+file 'file:C:/xampp/htdocs/Genetic_Algorithm/fortran_code/manim/media/videos/test/480p15/partial_movie_files/PointMovingOnShapes/2201830969_4271673856_3826825815.mp4'
+file 'file:C:/xampp/htdocs/Genetic_Algorithm/fortran_code/manim/media/videos/test/480p15/partial_movie_files/PointMovingOnShapes/2201830969_3048626930_625447078.mp4'
+file 'file:C:/xampp/htdocs/Genetic_Algorithm/fortran_code/manim/media/videos/test/480p15/partial_movie_files/PointMovingOnShapes/2201830969_731262595_3826825815.mp4'
+file 'file:C:/xampp/htdocs/Genetic_Algorithm/fortran_code/manim/media/videos/test/480p15/partial_movie_files/PointMovingOnShapes/2201830969_641011677_2792449024.mp4'

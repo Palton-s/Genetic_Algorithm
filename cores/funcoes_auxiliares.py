@@ -90,21 +90,29 @@ def mistura_cores(cor_1, cor_2, percent_1, percent_2):
 
 import random
 
-def calcula_hsv(cor_final):
+def calcula_hls(cor_final):
     # transforma RGB para hsl
-    hsv_color = colorsys.rgb_to_hsv(cor_final[0]/255, cor_final[1]/255, cor_final[2]/255)
+    hls_color = colorsys.rgb_to_hls(cor_final[0]/255, cor_final[1]/255, cor_final[2]/255)
     # retorna o valor do matiz
-    return hsv_color
+    return hls_color
 
-def calcula_h(individuo, cor_1, cor_2, cor_alvo):
-    cor_final = mistura_cores(cor_1, cor_2, individuo[0], 10-individuo[0])
-    h_final = calcula_hsv(cor_final)[0]
-    h_alvo = calcula_hsv(cor_alvo)[0]
+def calcula_h(individuo, cor_1, cor_2, cor_alvo, precisao):
+    cor_final = mistura_cores(cor_1, cor_2, individuo, precisao-individuo)
+    h_final = calcula_hls(cor_final)[0]
+    h_alvo = calcula_hls(cor_alvo)[0]
     return 1-abs(h_final - h_alvo)
 
-def calcula_h_individuo(individuo, cor_1, cor_2, cor_alvo):
+def calcula_h_individuo(individuo, cor_1, cor_2, cor_alvo,precisao):
     # calcula o valor do matiz
-    cor_final = mistura_cores(cor_1, cor_2, individuo, 10-individuo)
-    h_final = calcula_hsv(cor_final)[0]
-    h_alvo = calcula_hsv(cor_alvo)[0]
+    cor_final = mistura_cores(cor_1, cor_2, individuo, precisao-individuo)
+    h_final = calcula_hls(cor_final)[0]
+    h_alvo = calcula_hls(cor_alvo)[0]
     return 1-abs(h_final - h_alvo)
+
+def proximidade_de_cores_RGB(cor, cor_alvo):
+    # calcula a distância entre a cor e a cor alvo
+    dist = 0
+    for i in range(3):
+        dist += (cor[i]-cor_alvo[i])**2
+    dist = dist**(1/2)
+    return 1-dist
