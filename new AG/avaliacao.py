@@ -4,7 +4,7 @@ import funcoes_auxiliares as aux
 from dados import *
 
 
-def avaliacao(X):
+def avaliacao(X, limites):
     table_s2 = [[1.00, -2.861030, -2.904236, -2.90461],
         [1.05, -2.881138, -2.924612, -2.92505],
         [1.10, -2.896661, -2.940398, -2.94060],
@@ -51,6 +51,8 @@ def avaliacao(X):
     # recupera o número de variáveis
     variaveis = len(X[0])
     # converte os cromossomos binários para decimais
+    if(limites == [-100, 100]):
+        print("Erro")
     X = aux.converte_populacao(X, limites)
     # avalia quão bons os indivíduos são com base em uma gaussiana de variaveis dimensões
     for individuo in X:
