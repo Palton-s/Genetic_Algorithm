@@ -1,6 +1,6 @@
 def decimal_to_binary(number, alcance, n):
-    init = alcance[0]
-    final = alcance[1]
+    init = alcance[0]+10e-10
+    final = alcance[1]+10e-10
     # convertendo o valor decimal para binario
     aux = ((number-init/2)*(2**n-1))/final
     aux_int = int(aux)
@@ -10,9 +10,15 @@ def decimal_to_binary(number, alcance, n):
     # completa com zeros a esquerda
     binary = binary.zfill(n)
     # retorna o cromossomo em binario
+    # if binary have "b" char, it's error
+    if binary.find("b") != -1:
+        #change b to 0 everywhere
+        binary = binary.replace("b", "1")
+
     return binary
 
-def binary_to_decimal(binary, alcance, n):
+def binary_to_decimal(binary, alcance):
+    n = len(binary)
     # converte o cromossomo de binario para decimal
     init = alcance[0]
     final = alcance[1]
@@ -33,17 +39,43 @@ def converte_individuo(individuo, alcance):
     # recupera o número de bits por variável
     n_bits = len(individuo[0])
     # para cada variável, converte seu valor de binário para decimal
-    if alcance[0] == -100:
-        print("erro")
     for i in range(n_variaveis):
-        variavel = binary_to_decimal(individuo[i], alcance[i] , n_bits)
+        if individuo[i][0] == "b":
+            print("erro")
+        variavel = binary_to_decimal(individuo[i], alcance[i])
         variaveis.append(variavel)
+        
+    # retorna o array com as variáveis
+    return variaveis
+
+def desconverve_individuo(values, alcance, n_bits):
+    # define o array com as variáveis
+    variaveis = []
+    # recupera o número de variáveis
+    n_variaveis = len(values)
+    # para cada variável, converte seu valor de decimal para binário
+    for i in range(n_variaveis):
+        variavel = decimal_to_binary(values[i], alcance[i], n_bits)
+        variavel_bits = [char for char in variavel]
+        variaveis.append(variavel_bits)
+    # retorna o array com as variáveis
+    return variaveis
+
+def desconverte_populacao(populacao, alcance, n_bits):
+    # define o array com as variáveis
+    variaveis = []
+    # recupera o número de variáveis
+    n_variaveis = len(populacao)
+    # para cada variável, converte seu valor de decimal para binário
+    for i in range(n_variaveis):
+        variavel = desconverve_individuo(populacao[i], alcance, n_bits)
+        variaveis.append(variavel)
+        if variavel[0] == "b":
+            print("erro")
     # retorna o array com as variáveis
     return variaveis
 
 def converte_populacao(populacao, alcance):
-    if alcance[0] == -100:
-        print("erro")
     # resgata o número de indivíduos
     n_individuos = len(populacao)
     # inicia o array com a população convertida
@@ -59,7 +91,7 @@ def converte_populacao(populacao, alcance):
 
 def ordena(X,Y):
     # ordena os valores de X e Y com base em Y do menos bem avaliado para o melhor avaliado
-    X, Y = zip(*sorted(zip(X, Y), key=lambda x: x[1], reverse=False))
+    X, Y = zip(*sorted(zip(X, Y), key=lambda x: x[1], reverse=True))
     # retorna os valores ordenados
     return X, Y
 

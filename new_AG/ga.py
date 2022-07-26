@@ -1,4 +1,3 @@
-from turtle import color
 import crossover
 import mutacao
 import populacao
@@ -7,13 +6,12 @@ import funcoes_auxiliares as aux
 import numpy as np
 import csv
 from dados import *
-import plotly.express as px
-
-
+import matplotlib.pyplot as plt
 
 class GA(Dados):
 
-    def exec_ga(self):
+    def __init__(self) -> None:
+        super().__init__()
         # inicia a população
         X = populacao.cria_populacao(self.NV, self.N, self.n_bits)
         # variavel com dados estatísticos de cada geração
@@ -41,8 +39,31 @@ class GA(Dados):
             #dados_geracao.append([i, np.mean(Y)])
             dados_geracao.append([i,Y[-1]])
             self.add_to_file('dados_geracao.csv', [i, Y[-1]])
+            print(i, Y[-1])
+            self.X = X
+            self.Y = Y
+            self.values = aux.converte_populacao(X, self.limites)
+            print(aux.converte_individuo(X[-1], self.limites))
+            elite_values = aux.converte_populacao(elite, self.limites)
+
+            # if i are multiple of 10, plot the best individual
+            if i % 10 == 0:
+                biggest_value = [max([elite_values[i][j] for i in range(len(elite_values))]) for j in range(self.NV)]
+                smallest_value = [min([elite_values[i][j] for i in range(len(elite_values))]) for j in range(self.NV)]
+
+                for i in range(self.NV):
+                    if smallest_value[i] == biggest_value[i]:
+                        smallest_value[i] = smallest_value[i] - abs(0.1*smallest_value[i])
+                        biggest_value[i] = biggest_value[i] + abs(0.1*biggest_value[i])
+                        
+                    self.change_limites(i, smallest_value[i]-abs(0.3*smallest_value[i]), biggest_value[i]+abs(0.3*biggest_value[i]))
+                X = [aux.desconverve_individuo(self.values[k], self.limites, self.n_bits) for k in range(self.N)]
+
+            print(aux.converte_individuo(X[-1], self.limites))
+            print("----------------------------------")
+            
         X, Y = aux.ordena(X, Y)
-        return aux.converte_individuo(X[-1],limites)
+        
 
     def add_to_file(self,file_name, array):
         #add array data to a csv file
@@ -53,7 +74,7 @@ class GA(Dados):
 
 
 ga_ = GA()
-values = ga_.exec_ga()
+#values = ga_.exec_ga()
 
 
 
@@ -98,7 +119,7 @@ def potential(D,a,r,r_eq):
         somatorio += a[i]*(r-r_eq)
     V_ryd = -D*somatorio*np.exp(-a[0]**2)
     return V_ryd
-
+values = ga_.values[-1]
 D = values[0]
 a = [values[1], values[2], values[3]]
 r = [row[0] for row in table_s2]
@@ -113,4 +134,7 @@ print(potentials)
 
 #plot r x potentials and r x HF in sabe plot
 plt.plot(r,potentials, label='potential')
+plt.plot(r,HF, label='HF')
+plt.legend()
+plt.show()
 
