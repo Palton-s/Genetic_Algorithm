@@ -73,7 +73,8 @@ def potential(D,a,r,r_eq):
     somatorio = 1
     for i in range(m):
         somatorio += a[i]*(r-r_eq)
-    V_ryd = -D*somatorio*np.exp(-a[0]**2)
+    #V_ryd = -D*somatorio*np.exp(-a[0]**2)
+    V_ryd = -D*somatorio*np.exp(-a[0]*(r-r_eq))
     return V_ryd
 
 
