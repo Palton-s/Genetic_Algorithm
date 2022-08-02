@@ -7,10 +7,10 @@ import numpy as np
 import csv
 from dados import *
 import matplotlib.pyplot as plt
-
+import time
 class GA(Dados):
 
-    def __init__(self, n_geracoes = Dados.n_geracoes, limites_dif = [] ) -> None:
+    def __init__(self, n_geracoes = Dados.n_geracoes, limites_dif = [], mudar_limites = False ) -> None:
         self.n_geracoes = n_geracoes
         self.limites = [[-1000, 1000],[-1000, 1000],[-1000, 1000],[-1000, 1000],[-1000, 1000]]
         if len(limites_dif) > 0:
@@ -41,10 +41,16 @@ class GA(Dados):
                 filhos = mutacao.mut_pop(filhos, self.taxa_de_mutacao, self.intensidade_da_mutacao)
                 # atribui os filhos à população
                 X = aux.atribui(X, filhos, elite)
+            if i%2 == 0:
+                time.sleep(1)
 
-            if i % self.mudanca_limites == 0 and i != 0:
+            if mudar_limites and i % self.mudanca_limites == 0 and i != 0:
+                
                 elite_values = aux.converte_populacao(elite, self.limites)
-                self.values = aux.converte_populacao(X, self.limites)
+                values = aux.converte_populacao(X, self.limites)
+                self.write_on_file("Geração: " + str(i) + " - Melhor: " + str(Y[-1]) + " - Valores: " + str(values[-1]))
+                average_evaluate = np.mean(Y)
+                print("Geração: " + str(i) + " - Melhor: " + str(Y[-1]) + " - Valores: " + str(values[-1]))
                 biggest_value = [max([elite_values[i][j] for i in range(len(elite_values))]) for j in range(self.NV)]
                 smallest_value = [min([elite_values[i][j] for i in range(len(elite_values))]) for j in range(self.NV)]
 
@@ -54,12 +60,13 @@ class GA(Dados):
                         biggest_value[i] = biggest_value[i] + abs(0.1*biggest_value[i])
                         
                     self.change_limites(i, smallest_value[i]-abs(0.3*smallest_value[i]), biggest_value[i]+abs(0.3*biggest_value[i]))
-                X = [aux.desconverve_individuo(self.values[k], self.limites, self.n_bits) for k in range(self.N)]
-
-            dados_geracao.append([i,Y[-1]])
-            self.add_to_file('dados_geracao.csv', [i, Y[-1]])
-            self.X = X
-            self.Y = Y
+                X = [aux.desconverve_individuo(values[k], self.limites, self.n_bits) for k in range(self.N)]
+            #print("Geração: " + str(i) + " - Melhor: " + str(Y[-1]) + " - Valores: " + str(aux.converte_individuo(X[-1], self.limites)))
+            #populacao_valores = aux.converte_populacao(X, self.limites)
+            #del Y, elite, melhores, filhos
+            # get the usage cpu percentage
+            #self.X = X
+            #self.Y = Y
             
         X, Y = aux.ordena(X, Y)
         self.best_individual = aux.converte_individuo(X[-1], self.limites)
@@ -135,5 +142,16 @@ class GA(Dados):
         for i in range(m):
             somatorio += a[i]*(r-r_eq)
         #V_ryd = -D*somatorio*np.exp(-a[0]**2)
-        V_ryd = -D*somatorio*np.exp(-a[0]*(r-r_eq))
+        V_ryd = float(-D*somatorio*np.exp(-a[0]*(r-r_eq)))
         return V_ryd
+    
+    def write_on_file(self, text):
+        # write text on file "melhores_avaliacoes.log"
+        with open("melhores_avaliacoes.log", 'a') as f:
+            f.write(text)
+            f.write("\n")
+            
+"""
+
+ga = GA(3000)
+ga.plot_result()"""

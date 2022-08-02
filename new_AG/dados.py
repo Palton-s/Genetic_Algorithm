@@ -5,11 +5,11 @@ class Dados():
     n_a = 3
     NV = 2+n_a  # número de variáveis
     N = 1000 # numero de individuos
-    n_bits = 64 # número de bits por variável em cada indivíduo
-    percent_elite = 0.1 # percentual dos melhores indivíduos que serão conservados para a próxima geração
+    n_bits = 32 # número de bits por variável em cada indivíduo
+    percent_elite = 0.010 # percentual dos melhores indivíduos que serão conservados para a próxima geração
     n_cortes_no_cruzamento = int(n_bits/3) # número de pontos de corte no cruzamento
     n_geracoes = 3000 # número de gerações
-    taxa_de_mutacao = 0.1 # taxa de mutação
+    taxa_de_mutacao = 0.2 # taxa de mutação
     intensidade_da_mutacao = 0.2 # intensidade da mutação
     """limites = [[-20,0]]
     for i in range(NV-1):

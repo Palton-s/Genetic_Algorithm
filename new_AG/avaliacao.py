@@ -63,7 +63,7 @@ def avaliacao(X, limites):
         quadratic_sum = 0
         for i in range(len(R)):
             potential_ryd = potential(individuo[0], [individuo[1],individuo[2],individuo[3]], R[i], individuo[4])
-            quadratic_sum += (potential_ryd - HF[i])**2
+            quadratic_sum += ((potential_ryd - HF[i])**2)
         #quadratic_mean = (sqrt(quadratic_sum)/len(R))
         quadratic_mean = (sqrt(quadratic_sum)/len(R))
         #avaliacao = 1/(quadratic_mean)
@@ -77,7 +77,10 @@ def potential(D,a,r,r_eq):
     somatorio = 1
     for i in range(m):
         somatorio += a[i]*(r-r_eq)
-    V_ryd = -D*somatorio*np.exp(-a[0]**2)
+    #V_ryd = -D*somatorio*np.exp(-a[0]**2)
+    arg_exponential = -a[0]*(r-r_eq)
+    exponential = float(np.exp(arg_exponential))
+    V_ryd = -D*somatorio*exponential
     return V_ryd
 
 

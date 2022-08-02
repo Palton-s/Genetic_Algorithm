@@ -27,7 +27,9 @@ def binary_to_decimal(binary, alcance):
     for i in range(n):
         decimal += int(binary[i])*(2**(n-i-1))    
     # converte o valor inteiro para o intervalo de valores do cromossomo
-    decimal = (decimal*final)/(2**n-1)+init/2
+    # the min value is init, when the bits are 0
+    # the max value is final, when the bits are 1
+    decimal = (decimal*(final-init))/(2**n-1) + init
     # retorna o valor decimal
     return decimal
 

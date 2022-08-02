@@ -63,9 +63,6 @@ def cruza_populacao(melhores, n_cortes):
     # retorna a população de filhos
     return filhos
 
-populacao = [[[1,1,1,1,1,1,1,1]], [[0,0,0,0,0,0,0,0]]]
-cruzamento = cruza_populacao(populacao, 2)
-
 def roleta(X,Y,percent_individuos):
     # pega a quantidade de indivíduos
     n_individuos = len(X)
@@ -102,10 +99,3 @@ def roleta(X,Y,percent_individuos):
             filhos.append(X[n_individuos-1])
     # retorna a população de filhos
     return filhos
-
-    
-
-
-
-
-print(cruzamento)
