@@ -1,3 +1,4 @@
+import threading
 from ga import GA
 import datetime
 
@@ -22,30 +23,41 @@ def limites_espalhamento(limites, spaces):
     return ranges
 
 limites = limites_espalhamento(ranges,2)
-#print(limites)
 
-for i in range(2):
-    for j in range(4):
-        count = 0
-        avaliacoes = []
-        for limite in limites:
-            count += 1
-            time = datetime.datetime.now()
-            ga = GA(3, limite)
+def executa_ga(geracoes, limite):
+    time = datetime.datetime.now()
+    ga = GA(geracoes, limite)
+    avaliacoes.append([ga.best_evaluation, limite])
+    with open("esp_dom.log", "a") as f:
+        # datetime format date and hour
+        datetime_now = datetime.datetime.now()
+        datetime_now = datetime_now.strftime("%Y-%m-%d %H:%M:%S")
+        date_interval = datetime.datetime.now() - time
+        date_interval = date_interval.total_seconds()
+        f.write(" --------- "+datetime_now+" --------- "+str(int(date_interval))+" seconds -------- ")
+        f.write(str(ga.best_evaluation) + " " + str(limite) + "\n")
+    
 
-            print(count,"melhor individuo: ", ga.best_evaluation, "limite: ", limite)
-            avaliacoes.append([ga.best_evaluation, limite])
-            with open("esp_dom.log", "a") as f:
-                # datetime format date and hour
-                datetime_now = datetime.datetime.now()
-                datetime_now = datetime_now.strftime("%Y-%m-%d %H:%M:%S")
-                date_interval = datetime.datetime.now() - time
-                date_interval = date_interval.total_seconds()
-                f.write(" --------- "+datetime_now+" --------- "+str(int(date_interval))+" seconds -------- ")
-                f.write(str(ga.best_evaluation) + " " + str(limite) + "\n")
-            # write in file esp_dom.log
-        avaliacoes.sort(key=lambda x: x[0])
-        limites = [ avaliacoes[i][1] for i in range(len(avaliacoes)) ]
-        # limites = first half
-        limites = [ limites[i] for i in range(int(len(limites)/2)) ]
-    limites = limites_espalhamento(limites[0],2)
+
+threads = []
+avaliacoes = []
+n__ = int(len(limites))
+for i in range(n__):
+    results = [0] * n__
+    threads.append(threading.Thread(target=executa_ga, args=(50, limites[i])))
+    
+    
+
+for thread in threads:
+    thread.start()
+for thread in threads:
+    thread.join()
+
+# order avaliacoes by best_evaluation
+avaliacoes.sort(key=lambda x: x[0])
+
+# select the first half
+avaliacoes = avaliacoes[:4]
+
+print(avaliacoes)
+

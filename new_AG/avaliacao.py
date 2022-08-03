@@ -69,7 +69,7 @@ def avaliacao(X, limites):
         #avaliacao = 1/(quadratic_mean)
         avaliacao = quadratic_mean
         avaliacao = avaliacao.real
-        Y.append(avaliacao)
+        Y.append(round(avaliacao,5))
     return Y
 
 def potential(D,a,r,r_eq):
