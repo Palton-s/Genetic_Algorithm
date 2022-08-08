@@ -12,7 +12,10 @@ class GA(Dados):
 
     def __init__(self, n_geracoes = Dados.n_geracoes, limites_dif = [], mudar_limites = False ) -> None:
         self.n_geracoes = n_geracoes
-        self.limites = [[-1000, 1000],[-1000, 1000],[-1000, 1000],[-1000, 1000],[-1000, 1000]]
+        #self.limites = [[-1000, 1000],[-1000, 1000],[-1000, 1000],[-1000, 1000],[-1000, 1000]]
+        #self.limites = [[2.8823580029711597, 2.8823580030196663], [0.001151012790312193, 0.001151012838818577], [-2.796630859423506, -2.7966308593749996], [2.7925618489098274, 2.792561848958334], [3.828126024648858, 3.8281260246973643]]
+        #self.limites = [[2.8645833333333406, 2.994791666666674], [0.0, 0.006510416666666667], [-79.03645833333333, -78.90625], [78.90625, 79.03645833333334], [2.03125, 2.037760416666667]]
+        self.limites = [[2.8157552083333406, 2.832031250000007], [0.004069010416666667, 0.0048828125], [-9.993489583333327, -9.97721354166666], [9.960937500000007, 9.977213541666675], [9.130859375, 9.131673177083334]]
         if len(limites_dif) > 0:
             self.limites = limites_dif
         #super().__init__()
@@ -71,6 +74,7 @@ class GA(Dados):
         X, Y = aux.ordena(X, Y)
         self.best_individual = aux.converte_individuo(X[-1], self.limites)
         self.best_evaluation = Y[-1]
+        self.values = aux.converte_populacao(X, self.limites)
         print("Melhor indivíduo: ", self.best_evaluation)
 
     def add_to_file(self,file_name, array):
@@ -151,7 +155,7 @@ class GA(Dados):
             f.write(text)
             f.write("\n")
             
-"""
 
-ga = GA(3000)
-ga.plot_result()"""
+
+ga = GA(1)
+ga.plot_result()

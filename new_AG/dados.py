@@ -1,7 +1,7 @@
 
 class Dados():    
     # define informações da população
-    mudanca_limites = 10
+    mudanca_limites = 2
     n_a = 3
     NV = 2+n_a  # número de variáveis
     N = 1000 # numero de individuos
