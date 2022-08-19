@@ -93,7 +93,7 @@ def converte_populacao(populacao, alcance):
 
 def ordena(X,Y):
     # ordena os valores de X e Y com base em Y do menos bem avaliado para o melhor avaliado
-    X, Y = zip(*sorted(zip(X, Y), key=lambda x: x[1], reverse=True))
+    X, Y = zip(*sorted(zip(X, Y), key=lambda x: x[1], reverse=False))
     # retorna os valores ordenados
     return X, Y
 
