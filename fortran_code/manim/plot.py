@@ -37,9 +37,6 @@ class gaussian_2(Scene):
         gaussian_graph = axes.plot(gaussian, color=BLUE)
         axes.set_color(BLACK)
         gaussian_graph.set_color(RED)
-        
-        text_func = Tex("f(x) = e^{-x^2}", color=RED, font="Courier", font_size=50)
-        text_func.next_to(gaussian_graph, UL, buff=0)
-        self.add(axes, gaussian_graph, text_func)
+        self.add(axes, gaussian_graph)
 
         
