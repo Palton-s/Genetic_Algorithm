@@ -12,7 +12,7 @@ valores = aux.converte_populacao(X, limites)
 n_cortes = int(3)
 
 
-#n of children
+#n of childrensss
 n_children = 300
 filhos = []
 
