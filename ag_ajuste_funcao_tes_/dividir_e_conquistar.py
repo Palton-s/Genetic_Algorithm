@@ -4,7 +4,7 @@ import datetime
 
 #ranges = [[2.5, 3.125], [0.0, 0.3125], [-0.625, 0.0], [0.0, 0.625], [0.125, 0.25]]
 #ranges = [[-10,10],[-10,10],[-10,10],[-10,10],[-10,10]]
-ranges = [[0, 200], [0, 200], [0, 200], [0, 200], [0, 200]]
+
 
 
 def add_and_reorder(data, divisor, file_name, reverse):
@@ -34,7 +34,9 @@ def add_and_reorder(data, divisor, file_name, reverse):
     # save on file file_name
     with open(file_name, "w") as f:
         for i in range(len(testes)):
-            f.write(str(testes[i][0])+divisor+str(testes[i][1])+"\n")
+            string = [peace for peace in testes[i]]
+            string = divisor.join(string)
+            f.write(string+"\n")
 
 
 def limites_espalhamento(limites, spaces):
@@ -88,7 +90,7 @@ def exec_thread(limites, n_geracoes, N = 0):
     for thread in threads:
         thread.join()
 
-    add_and_reorder(avaliacoes, " -------- ", "testesss.log", True)
+    add_and_reorder(avaliacoes, " -------- ", "conq_testesss.log", True)
 
     # order avaliacoes by best_evaluation
     avaliacoes.sort(key=lambda x: x[0])
@@ -103,18 +105,26 @@ def exec_thread(limites, n_geracoes, N = 0):
         f.write("----------------------\n")
     return avaliacoes
 
+def select_new_limites(limites):
+    new_limites = []
+    for i in range(len(limites[0])):
+        new_lim_beg = min([limites[j][i][0] for j in range(len(limites))])
+        new_lim_end = max([limites[j][i][1] for j in range(len(limites))])
+        new_limites.append([new_lim_beg, new_lim_end])
+    return new_limites
 
-limites = limites_espalhamento(ranges, 4)
-half_len = int(len(limites)/2)
+"""limites = limites_espalhamento(ranges, 2)
+init_len = len(limites)
 
 avaliacoes_finais = []
 avaliacoes = []
 # executa a busca nos 32 limites
 n_geracoes = 50
-N = 1000
+N = 100
 avaliacoes += exec_thread(limites, n_geracoes, N = N)
 avaliacoes.sort(key=lambda x: x[0])
-limites = [avaliacoes[j][1] for j in range(4)]    
+limites = [avaliacoes[j][1] for j in range(int(init_len/2))]
+limites = select_new_limites(limites)
 storage_avaliacao = []
 for dividir in range(10000):
     last_best = 4
@@ -124,4 +134,18 @@ for dividir in range(10000):
         limites = limites_espalhamento(avaliacoes_last_best[i][1], 2)
         avaliacoes += exec_thread(limites, n_geracoes, N = N)
         print("jaja")
+    avaliacoes.sort(key=lambda x: x[0])"""
+
+
+limite = [[0, 128], [0, 128], [0, 128], [0, 128], [0, 128]]
+
+n_geracoes = 2
+N = 1000
+
+for rodada in range(1000):
+    limites = limites_espalhamento(limite, 2)
+    avaliacoes = []
+    avaliacoes += exec_thread(limites, N = N, n_geracoes=n_geracoes)
     avaliacoes.sort(key=lambda x: x[0])
+    limite = select_new_limites([avaliacoes[j][1] for j in range(int(len(limites)/4))])
+
