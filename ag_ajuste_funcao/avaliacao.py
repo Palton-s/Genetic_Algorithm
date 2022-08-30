@@ -8,7 +8,7 @@ def avaliacao(X, limites):
     init = 1
     table_s2 = []
     for i in range(30):
-        table_s2.append([init,potential(45, 0.5, 3, init)])
+        table_s2.append([init,potential(45, 0.5, -20, init)])
         init += 0.1
 
     # a = col 0 of table_s2

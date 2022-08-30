@@ -32,6 +32,7 @@ class GA(Dados):
         avaliacoes = []
         dados_grafico_limites = []
         for i in range(self.n_geracoes):
+            #time.sleep(1)
             # avalia a população
             limites = self.limites
             Y = av.avaliacao(X, limites)
@@ -48,6 +49,8 @@ class GA(Dados):
                     limites_grafico[k].append(aux.converte_individuo(X[-(j+1)], self.limites)[k])
 
             dados_grafico_limites.append([i,limites_grafico])
+            # write on file dados_grafico_evolucao
+            self.add_to_file("dados_grafico_evolucao.csv", limites_grafico)
             ###########################################
             ###########################################
             ###########################################
@@ -67,23 +70,25 @@ class GA(Dados):
                     filhos, self.taxa_de_mutacao, self.intensidade_da_mutacao)
                 # atribui os filhos à população
                 X = aux.atribui(X, filhos, elite)
-            if Y[-1] < 0.01:
+            """if Y[-1] < 0.01:
                 self.taxa_de_mutacao = 0.5 # taxa de mutação
-                self.intensidade_da_mutacao = 0.5 # intensidade da mutação
-            if mudar_limites and i % self.mudanca_limites == 0 and i != 0 and Y[-1] > 0.01:
-                min_ranges = [10,10,10]
+                self.intensidade_da_mutacao = 0.5 # intensidade da mutação"""
+            if mudar_limites and i % self.mudanca_limites == 0 and i != 0:
+                min_ranges = [1,10,10]
+                max_ranges = [1000,1000,1000]
 
-                elite_values = aux.converte_populacao(elite, self.limites)
+                X, Y = aux.ordena(X, Y)
+                selected_values = aux.converte_populacao(X[-20:], self.limites)
                 values = aux.converte_populacao(X, self.limites)
                 self.write_on_file("Geração: " + str(i) + " - Melhor: " +
                                    str(Y[-1]) + " - Valores: " + str(values[-1]))
                 average_evaluate = np.mean(Y[-int(len(Y)/2)])
                 print("Geração: " + str(i) + " - Melhor: " +
                       str(round(Y[-1], 2)) + " - Valores: " + str([round(value, 2) for value in aux.converte_individuo(X[-1], self.limites)]))
-                biggest_value = [max([elite_values[i][j] for i in range(
-                    len(elite_values))]) for j in range(self.NV)]
-                smallest_value = [min([elite_values[i][j] for i in range(
-                    len(elite_values))]) for j in range(self.NV)]
+                biggest_value = [max([selected_values[i][j] for i in range(
+                    len(selected_values))]) for j in range(self.NV)]
+                smallest_value = [min([selected_values[i][j] for i in range(
+                    len(selected_values))]) for j in range(self.NV)]
 
                 for i in range(self.NV):
                     if smallest_value[i] == biggest_value[i]:
@@ -93,8 +98,12 @@ class GA(Dados):
                             abs(0.1*biggest_value[i])
                     range_ = biggest_value[i] - smallest_value[i]
                     if biggest_value[i] - smallest_value[i] < min_ranges[i]:
-                        smallest_value[i] = smallest_value[i] - min_ranges[i]/2
-                        biggest_value[i] = biggest_value[i] + min_ranges[i]/2
+                        smallest_value[i] = (smallest_value[i] + biggest_value[i])/2 - min_ranges[i]/2
+                        biggest_value[i] = (smallest_value[i] + biggest_value[i])/2 + min_ranges[i]/2
+                    if biggest_value[i] - smallest_value[i] > max_ranges[i]:
+                        smallest_value[i] = (smallest_value[i] + biggest_value[i])/2 - max_ranges[i]/2
+                        biggest_value[i] = (smallest_value[i] + biggest_value[i])/2 + max_ranges[i]/2
+                    
                     self.change_limites(
                         i, smallest_value[i]-abs(0.05*range_), biggest_value[i]+abs(0.05*range_))
                 X = [aux.desconverve_individuo(
@@ -145,10 +154,10 @@ class GA(Dados):
         self.values = aux.converte_populacao(X, self.limites)
         print("Melhor indivíduo: ", self.best_evaluation)
 
-    def add_to_file(self, file_name, array):
+    def add_to_file(self, file_name, array, delimiter=";"):
         # add array data to a csv file
         with open(file_name, 'a') as f:
-            csv.writer(f, delimiter=";", lineterminator="\n").writerow(array)
+            csv.writer(f, delimiter=delimiter, lineterminator="\n").writerow(array)
 
     def plot_result(self):
         init = 1
