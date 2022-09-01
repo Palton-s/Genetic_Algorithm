@@ -116,8 +116,7 @@ avaliacoes_finais = []
 avaliacoes = []
 # executa a busca nos 32 limites
 n_geracoes = 10
-# N individuos
-N = 30
+N = 2000
 avaliacoes += exec_thread(limites, n_geracoes, N = N)
 avaliacoes.sort(key=lambda x: x[0])
 limites = [avaliacoes[j][1] for j in range(4)]    
