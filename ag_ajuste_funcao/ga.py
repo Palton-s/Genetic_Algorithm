@@ -73,11 +73,12 @@ class GA(Dados):
                 self.taxa_de_mutacao = 0.5 # taxa de mutação
                 self.intensidade_da_mutacao = 0.5 # intensidade da mutação"""
             if mudar_limites and i % self.mudanca_limites == 0 and i != 0:
-                min_ranges = [50,50,50]
-                max_ranges = [1000,1000,1000]
+                min_ranges = [10,10,10, 10, 10]
+                max_ranges = [10,10,10, 10, 10]
+                limites_moveis = [True, True, True, True, False]
 
                 X, Y = aux.ordena(X, Y)
-                selected_values = aux.converte_populacao(X[-20:], self.limites)
+                selected_values = aux.converte_populacao(elite, self.limites)
                 values = aux.converte_populacao(X, self.limites)
                 self.write_on_file("Geração: " + str(i) + " - Melhor: " +
                                    str(Y[-1]) + " - Valores: " + str(values[-1]))
@@ -90,21 +91,22 @@ class GA(Dados):
                     len(selected_values))]) for j in range(self.NV)]
 
                 for i in range(self.NV):
-                    if smallest_value[i] == biggest_value[i]:
-                        smallest_value[i] = smallest_value[i] - \
-                            abs(0.1*smallest_value[i])
-                        biggest_value[i] = biggest_value[i] + \
-                            abs(0.1*biggest_value[i])
-                    range_ = biggest_value[i] - smallest_value[i]
-                    if biggest_value[i] - smallest_value[i] < min_ranges[i]:
-                        smallest_value[i] = (smallest_value[i] + biggest_value[i])/2 - min_ranges[i]/2
-                        biggest_value[i] = (smallest_value[i] + biggest_value[i])/2 + min_ranges[i]/2
-                    if biggest_value[i] - smallest_value[i] > max_ranges[i]:
-                        smallest_value[i] = (smallest_value[i] + biggest_value[i])/2 - max_ranges[i]/2
-                        biggest_value[i] = (smallest_value[i] + biggest_value[i])/2 + max_ranges[i]/2
-                    
-                    self.change_limites(
-                        i, smallest_value[i]-abs(0.05*range_), biggest_value[i]+abs(0.05*range_))
+                    if limites_moveis[i]:
+                        if smallest_value[i] == biggest_value[i]:
+                            smallest_value[i] = smallest_value[i] - \
+                                abs(0.1*smallest_value[i])
+                            biggest_value[i] = biggest_value[i] + \
+                                abs(0.1*biggest_value[i])
+                        range_ = biggest_value[i] - smallest_value[i]
+                        if biggest_value[i] - smallest_value[i] < min_ranges[i]:
+                            smallest_value[i] = (smallest_value[i] + biggest_value[i])/2 - min_ranges[i]/2
+                            biggest_value[i] = (smallest_value[i] + biggest_value[i])/2 + min_ranges[i]/2
+                        if biggest_value[i] - smallest_value[i] > max_ranges[i]:
+                            smallest_value[i] = (smallest_value[i] + biggest_value[i])/2 - max_ranges[i]/2
+                            biggest_value[i] = (smallest_value[i] + biggest_value[i])/2 + max_ranges[i]/2
+                        
+                        self.change_limites(
+                            i, smallest_value[i]-abs(0.05*range_), biggest_value[i]+abs(0.05*range_))
                 X = [aux.desconverve_individuo(
                     values[k], self.limites, self.n_bits) for k in range(self.N)]
             average_evaluate = np.mean(Y[-int(len(Y)/2)])
@@ -197,5 +199,5 @@ class GA(Dados):
             f.write("\n")
 
 
-ga = GA(800, mudar_limites=True)
+ga = GA(1600000, mudar_limites=True)
 #ga.plot_result()

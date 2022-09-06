@@ -1,11 +1,11 @@
 
 class Dados():    
     # define informações da população
-    mudanca_limites = 10
-    NV = 3  # número de variáveis
-    N = 500 # numero de individuos
+    mudanca_limites = 300
+    NV = 5  # número de variáveis
+    N = 100 # numero de individuos
     n_bits = 12 # número de bits por variável em cada indivíduo
-    percent_elite = 0.2 # percentual dos melhores indivíduos que serão conservados para a próxima geração
+    percent_elite = 0.1 # percentual dos melhores indivíduos que serão conservados para a próxima geração
     n_cortes_no_cruzamento = int(n_bits/3) # número de pontos de corte no cruzamento
     n_geracoes = 800 # número de gerações
     taxa_de_mutacao = 0.1 # taxa de mutação
@@ -19,7 +19,7 @@ class Dados():
     #limites = [[13.148469220847417, 29.668025099939697], [-5.048801705719397, -2.019050955766024], [-40.2675376485014, -16.07143717117349], [14.973431900140957, 53.95690912629257], [101.40806390842977, 193.48988251962226]]
     #limites = [[-10, 10],[-10, 10],[-10, 10],[-10, 10],[-10, 10]]
     #limites = [[44, 46], [0.4, 0.6], [2.9, 3.1]]
-    limites = [[500,1500],[1,1000],[0,1000]]
+    limites = [[0,2],[-10,10],[-10,10],[-10,10],[1.4,1.5]]
 
 
     def change_limites(self, variable, range1, range2):
