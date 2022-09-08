@@ -1,4 +1,3 @@
-from turtle import color
 import matplotlib.pyplot as plt
 from cmath import sqrt
 import numpy as np
@@ -97,8 +96,8 @@ def potential_2(D, a, r, r_eq):
     m = len(a)
     somatorio = 1
     rho = r - r_eq
-    for i in range(m):
-        somatorio += a[i]*(rho**i)
+    for i in range(1,m+1):
+        somatorio += a[i-1]*(rho**i)
     #V_ryd = -D*somatorio*np.exp(-a[0]**2)
     V_ryd = -D*somatorio*np.exp(-a[0]*rho)
     return V_ryd

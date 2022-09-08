@@ -5,7 +5,8 @@ import datetime
 
 #ranges = [[2.5, 3.125], [0.0, 0.3125], [-0.625, 0.0], [0.0, 0.625], [0.125, 0.25]]
 #ranges = [[-10,10],[-10,10],[-10,10],[-10,10],[-10,10]]
-ranges = [[0, 1000], [0, 300], [0, 200], [0, 200]]
+#ranges = [[0, 1000], [0, 300], [0, 200], [0, 200]]
+ranges = [[2, 10],[-5, 5],[-5, 5],[-10, 10],[0,5]]
 
 
 def add_and_reorder(data, divisor, file_name, reverse):
@@ -27,6 +28,8 @@ def add_and_reorder(data, divisor, file_name, reverse):
         # split each element of array by " -------- "
         testes = [testes[i].split(divisor) for i in range(len(testes))]
     print("testes")
+    # remove all testes with 'e-'
+    testes = [testes[i] for i in range(len(testes)) if not re.search("e-", testes[i][0])]
     # order testes by id
     testes = sorted(testes, key=lambda x: float(x[0]), reverse=reverse)
     # get the last 1000 testes
@@ -46,12 +49,15 @@ def limites_espalhamento(limites, spaces):
             # i for element 0
             for k in range(spaces):
                 for l in range(spaces):
-                    limites_var = []
-                    limites_var.append([limites[0][0]+i*(limites[0][1]-limites[0][0]) / spaces, limites[0][0]+(i+1)*(limites[0][1]-limites[0][0])/spaces])
-                    limites_var.append([limites[1][0]+j*(limites[1][1]-limites[1][0]) / spaces, limites[1][0]+(j+1)*(limites[1][1]-limites[1][0])/spaces])
-                    limites_var.append([limites[2][0]+k*(limites[2][1]-limites[2][0]) / spaces, limites[2][0]+(k+1)*(limites[2][1]-limites[2][0])/spaces])
-                    limites_var.append([limites[3][0]+l*(limites[3][1]-limites[3][0]) / spaces, limites[3][0]+(l+1)*(limites[3][1]-limites[3][0])/spaces])
-                    ranges.append(limites_var)
+                    for m in range(spaces):
+                        limites_var = []
+                        limites_var.append([limites[0][0]+i*(limites[0][1]-limites[0][0]) / spaces, limites[0][0]+(i+1)*(limites[0][1]-limites[0][0])/spaces])
+                        limites_var.append([limites[1][0]+j*(limites[1][1]-limites[1][0]) / spaces, limites[1][0]+(j+1)*(limites[1][1]-limites[1][0])/spaces])
+                        limites_var.append([limites[2][0]+k*(limites[2][1]-limites[2][0]) / spaces, limites[2][0]+(k+1)*(limites[2][1]-limites[2][0])/spaces])
+                        limites_var.append([limites[3][0]+l*(limites[3][1]-limites[3][0]) / spaces, limites[3][0]+(l+1)*(limites[3][1]-limites[3][0])/spaces])
+                        limites_var.append([limites[4][0]+m*(limites[4][1]-limites[4][0]) / spaces, limites[4][0]+(m+1)*(limites[4][1]-limites[4][0])/spaces])
+                        ranges.append(limites_var)
+    
     return ranges
 
 
@@ -115,9 +121,9 @@ half_len = int(len(limites)/2)
 avaliacoes_finais = []
 avaliacoes = []
 # executa a busca nos 32 limites
-n_geracoes = 10
+n_geracoes = 2
 # N individuos
-N = 30
+N = 20
 avaliacoes += exec_thread(limites, n_geracoes, N = N)
 avaliacoes.sort(key=lambda x: x[0])
 limites = [avaliacoes[j][1] for j in range(4)]    
