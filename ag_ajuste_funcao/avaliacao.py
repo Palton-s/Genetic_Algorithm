@@ -5,7 +5,7 @@ import funcoes_auxiliares as aux
 from dados import *
 
 
-def avaliacao(X, limites):
+def avaliacao(X, limites, until):
     init = 1
     table_s2 = []
     """for i in range(30):
@@ -75,9 +75,11 @@ def avaliacao(X, limites):
         # para cada variável
         avaliacao = 0
         quadratic_sum = 0
-        for i in range(len(R)):
+        to_range = int(until*len(R))
+        for i in range(to_range):
+            a = [individuo[i] for i in range(1, len(individuo)-1)]
             potential_ryd = potential_2(
-                individuo[0], [individuo[1], individuo[2], individuo[3]], R[i], individuo[4])
+                individuo[0], a , R[i], individuo[-1])
             quadratic_sum += (potential_ryd - HF[i])**2
         quadratic_mean = quadratic_sum
         avaliacao = quadratic_mean

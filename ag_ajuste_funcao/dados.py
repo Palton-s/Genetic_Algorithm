@@ -1,9 +1,9 @@
 
 class Dados():    
     # define informações da população
-    mudanca_limites = 30
-    NV = 5  # número de variáveis
-    N = 3000 # numero de individuos
+    mudanca_limites = 10
+    NV = 2+1  # número de variáveis
+    N = 10000 # numero de individuos
     n_bits = 12 # número de bits por variável em cada indivíduo
     percent_elite = 0.1 # percentual dos melhores indivíduos que serão conservados para a próxima geração
     n_cortes_no_cruzamento = int(n_bits/3) # número de pontos de corte no cruzamento
@@ -24,8 +24,12 @@ class Dados():
     #[3.061415, 0.727714, -0.795586, 0.438308, 1.448591]
     #limites = [[2.7, 2.9],[0, 1.5],[-1.5, 0.5],[0, 1],[1.44, 1.449]]
     #limites = [[2.3731778425655974, 3.4927113702623904], [0.16034985422740516, 0.9475218658892128], [-1.3265306122448979, 1.1224489795918364], [-0.49562682215743403, 0.3790087463556855], [1.44, 1.46]]
-    limites = [[2.0, 4.239067055393585], [-0.10204081632653073, 1.4723032069970845], [-2.5510204081632653, 2.3469387755102042], [-0.49562682215743403, 2.1282798833819245], [1.44, 1.46]]
-
+    #limites = [[2.0, 4.239067055393585], [-0.10204081632653073, 1.4723032069970845], [-2.5510204081632653, 2.3469387755102042], [-0.49562682215743403, 2.1282798833819245], [1.44, 1.46]]
+    limites = []
+    for i in range(NV):
+        limites.append([-10, 10])
+    limites[0] = [0, 5]
+    limites[-1] = [1.44, 1.47]
 
 
     def change_limites(self, variable, range1, range2):

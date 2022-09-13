@@ -12,8 +12,9 @@ import time
 
 class GA(Dados):
 
-    def __init__(self, n_geracoes=Dados.n_geracoes, limites_dif=[], mudar_limites=False, N = 0) -> None:
+    def __init__(self, n_geracoes=Dados.n_geracoes, limites_dif=[], mudar_limites=False, N = 0, until = 1) -> None:
         self.n_geracoes = n_geracoes
+        self.until = until
         # self.limites = [[-1000, 1000],[-1000, 1000],[-1000, 1000],[-1000, 1000],[-1000, 1000]]
         # self.limites = [[2.8823580029711597, 2.8823580030196663], [0.001151012790312193, 0.001151012838818577], [-2.796630859423506, -2.7966308593749996], [2.7925618489098274, 2.792561848958334], [3.828126024648858, 3.8281260246973643]]
         # self.limites = [[2.8645833333333406, 2.994791666666674], [0.0, 0.006510416666666667], [-79.03645833333333, -78.90625], [78.90625, 79.03645833333334], [2.03125, 2.037760416666667]]
@@ -34,7 +35,7 @@ class GA(Dados):
             #time.sleep(1)
             # avalia a população
             limites = self.limites
-            Y = av.avaliacao(X, limites)
+            Y = av.avaliacao(X, limites, self.until)
             # ordena a população
             X, Y = aux.ordena(X, Y)
             ###########################################
@@ -72,8 +73,11 @@ class GA(Dados):
                 self.taxa_de_mutacao = 0.5 # taxa de mutação
                 self.intensidade_da_mutacao = 0.5 # intensidade da mutação"""
             if mudar_limites and i % self.mudanca_limites == 0 and i != 0:
-                min_ranges = [1,1,1, 1, 1]
-                max_ranges = [5,5,5, 5, 5]
+                min_ranges = []
+                max_ranges = []
+                for m in range(self.NV):
+                    min_ranges.append(1)
+                    max_ranges.append(5)
                 limites_moveis = [True, True, True, True, False]
 
                 X, Y = aux.ordena(X, Y)
@@ -205,7 +209,8 @@ class GA(Dados):
         best = self.best_individual
         new_y = []
         for i in range(len(x)):
-            new_y.append(self.potential_2(best[0], [best[1], best[2], best[3]], x[i], best[4]))
+            a = [best[i] for i in range(1, len(best)-1)]
+            new_y.append(self.potential_2(best[0], a, x[i], best[-1]))
         plt.plot(x, new_y, label='Melhor indivíduo', color="red")
 
         """for i in range(25):
@@ -265,5 +270,5 @@ class GA(Dados):
             f.write(str(last_value)+divider+str(self.best_evaluation)+divider+str(self.limites)+"\n")
 
 
-ga = GA(10000, mudar_limites=True)
+ga = GA(5, mudar_limites=True, until=0.5)
 ga.plot_result()
