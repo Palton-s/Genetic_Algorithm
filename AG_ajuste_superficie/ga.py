@@ -1,3 +1,4 @@
+from turtle import color
 import crossover
 import mutacao
 import populacao
@@ -12,17 +13,17 @@ import time
 class Dados():    
     # define informações da população
     mudanca_limites = 2
-    NV = 2  # número de variáveis
-    N = 1000 # numero de individuos
+    NV = 3  # número de variáveis
+    N = 5000 # numero de individuos
     n_bits = 10 # número de bits por variável em cada indivíduo
-    percent_elite = 0.01 # percentual dos melhores indivíduos que serão conservados para a próxima geração
+    percent_elite = 0.1 # percentual dos melhores indivíduos que serão conservados para a próxima geração
     n_cortes_no_cruzamento = int(n_bits/3) # número de pontos de corte no cruzamento
     n_geracoes = 3000 # número de gerações
-    taxa_de_mutacao = 0.6 # taxa de mutação
-    intensidade_da_mutacao = 0.2 # intensidade da mutação
-    limites = []
-    for i in range(NV):
-        limites.append([-3, 3])
+    taxa_de_mutacao = 0.1 # taxa de mutação
+    intensidade_da_mutacao = 0.1 # intensidade da mutação
+    limites = [[0,180],[0.000001,1.8],[0,15]]
+    """for i in range(NV):
+        limites.append([-3, 3])"""
 
     def change_limites(self, variable, range1, range2):
         self.limites[variable] = [range1, range2]
@@ -84,7 +85,7 @@ class GA(Dados):
                     self.change_limites(i, smallest_value[i]-abs(0.3*smallest_value[i]), biggest_value[i]+abs(0.3*biggest_value[i]))
                 X = [aux.desconverve_individuo(values[k], self.limites, self.n_bits) for k in range(self.N)]
             melhor_individuo = Y[-1]
-            melhores_avaliacoes = [Y[-i] for i in range(1,20)]
+            melhores_avaliacoes = Y[-100:]
             melhores_valores = aux.converte_populacao(X[-20:], self.limites)
             avaliacoes.append(melhores_avaliacoes)
             melhores_valores__.append(melhores_valores)
@@ -100,11 +101,14 @@ class GA(Dados):
         self.best_evaluation = Y[-1]
         self.values = aux.converte_populacao(X, self.limites)
         self.avaliacoes = avaliacoes
-        self.melhores_valores = melhores_valores__
+        self.melhores_valores = aux.converte_populacao(X[-20:], self.limites)
         #plot line avaliacoes
-        """for i in range(len(avaliacoes[0])):
-            plt.plot([avaliacoes[j][i] for j in range(len(avaliacoes))])
-        plt.show()"""
+        for i in range(len(avaliacoes[0])):
+            plt.plot([avaliacoes[j][i] for j in range(len(avaliacoes))], label = "avaliação " + str(i), linewidth=0.5, alpha=0.5, color = "blue")
+        plt.xlabel("Nº da geração")
+        # y axis
+        plt.ylabel("Avaliação")
+        plt.show()
         print("Melhor indivíduo: ", self.best_evaluation)
 
-#ga = GA(200)
+ga = GA(200, mudar_limites = False)

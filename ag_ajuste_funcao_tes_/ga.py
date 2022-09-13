@@ -78,7 +78,7 @@ class GA(Dados):
                 X = [aux.desconverve_individuo(
                     values[k], self.limites, self.n_bits) for k in range(self.N)]
             average_evaluate = np.mean(Y[-int(len(Y)/2)])
-            #print("Geração: " + str(i) + " - Media ava: " + str(average_evaluate) + " - Melhor: " + str(round(Y[-1], 2)) + " - Valores: " + str([round(value, 2) for value in aux.converte_individuo(X[-1], self.limites)]))
+            print("Geração: " + str(i) + " - Media ava: " + str(average_evaluate) + " - Melhor: " + str(round(Y[-1], 2)) + " - Valores: " + str([round(value, 2) for value in aux.converte_individuo(X[-1], self.limites)]))
             # write on file "grafico_convergencia.csv"
 
             # now = time.time()
@@ -102,44 +102,16 @@ class GA(Dados):
             csv.writer(f, delimiter=";", lineterminator="\n").writerow(array)
 
     def plot_result(self):
-        table_s2 = [[1.1, 63.40135055],
-                    [1.2, 64.90544146],
-                    [1.3, 66.60857345],
-                    [1.4, 68.51167852],
-                    [1.5, 70.60936103],
-                    [1.6, 72.88899945],
-                    [1.7, 75.33008112],
-                    [1.8, 77.90385152],
-                    [1.9, 80.5733492],
-                    [2, 83.29387969],
-                    [2.1, 86.01395649],
-                    [2.2, 88.67670667],
-                    [2.3, 91.22170422],
-                    [2.4, 93.58715951],
-                    [2.5, 95.71236062],
-                    [2.6, 97.54023559],
-                    [2.7, 99.01988668],
-                    [2.8, 100.1089403],
-                    [2.9, 100.7755616],
-                    [3, 101],
-                    [3.1, 100.7755616],
-                    [3.2, 100.1089403],
-                    [3.3, 99.01988668],
-                    [3.4, 97.54023559],
-                    [3.5, 95.71236062],
-                    [3.6, 93.58715951],
-                    [3.7, 91.22170422]]
 
         values = self.values[-1]
         A = values[0]
         B = values[1]
         C = values[2]
-        D = values[3]
 
-        x = [row[0] for row in table_s2]
-        y = [row[1] for row in table_s2]
+        x = [1+0.3*i for i in range(15)]
+        y = [self.potential(45, 0.5, 3, value) for value in x]
 
-        potentials = [self.potential(A, B, C, D, x_) for x_ in x]
+        potentials = [self.potential(A, B, C, x_) for x_ in x]
 
         print(potentials)
 
@@ -150,8 +122,8 @@ class GA(Dados):
         plt.show()
 
     # potential(individuo[0], [individuo[1], individuo[2], individuo[3]], R[i], individuo[4])
-    def potential(self, A, B, C, D, x):
-        result = D + A*np.exp(-B*((x-C)**2))
+    def potential(self,A, B, C, x):
+        result = A+1/(B*np.sqrt(2*np.pi))*np.exp(-((x-C)**2)/(2*B**2))
         return result
 
     def write_on_file(self, text):
@@ -161,6 +133,5 @@ class GA(Dados):
             f.write("\n")
 
 
-"""ga = GA(16000, mudar_limites=True)
-ga.plot_result()
-"""
+"""ga = GA(100, mudar_limites=True)
+ga.plot_result()"""

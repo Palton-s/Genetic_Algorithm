@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- chart js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css">
+    <title>Document</title>
+</head>
+<p>D</p>
+<input type="number" name="D_range" id="D_range" value="10">
+<p>a</p>
+<input type="number" name="a_range" id="a_range" value="2">
+<p>a_1</p>
+<input type="number" name="a_1_range" id="a_1_range" value="2">
+<p>a_2</p>
+<input type="number" name="a_2_range" id="a_2_range" value="2">
+<p>a_3</p>
+<input type="number" name="a_3_range" id="a_3_range" value="2">
+<p>a_4</p>
+<input type="number" name="a_4_range" id="a_4_range" value="2">
+<p>a_5</p>
+<input type="number" name="a_5_range" id="a_5_range" value="2">
+<div id="chart" style="height: 400px; width: 800px;">
+    <canvas id="myChart" style="height: 400px;"></canvas>
+</div>
+<div>
+    <!-- slider input -->
+    <input style="width:100%" type="range" min="0" max="100" value="50" class="slider" id="D" step="0.0001">
+    <input style="width:100%" type="range" min="0" max="100" value="50" class="slider" id="a" step="0.0001">
+    <input style="width:100%" type="range" min="0" max="100" value="50" class="slider" id="a_1" step="0.0001">
+    <input style="width:100%" type="range" min="0" max="100" value="50" class="slider" id="a_2" step="0.0001">
+    <input style="width:100%" type="range" min="0" max="100" value="50" class="slider" id="a_3" step="0.0001">
+    <input style="width:100%" type="range" min="0" max="100" value="50" class="slider" id="a_4" step="0.0001">
+    <input style="width:100%" type="range" min="0" max="100" value="50" class="slider" id="a_5" step="0.0001">
+    <p>D: <span id="D_val"></span></p>
+    <p>a: <span id="a_val"></span></p>
+
+</div>
+
+<body>
+
+    <!-- chart js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        x_coord = [1.00, 1.05, 1.10, 1.20, 1.30, 1.40, 1.42, 1.44, 1.4632, 1.48, 1.50, 1.60, 1.70, 1.80, 1.90, 2.00, 2.20, 2.40, 2.60, 2.80, 3.00, 3.20, 3.40, 3.60, 3.80, 4.00, 4.50, 5.00, 5.50, 6.00, 7.00, 8.00];
+        x_coord = [1.00, 1.05, 1.10, 1.20, 1.30, 1.40, 1.42, 1.44, 1.4632, 1.48, 1.50, 1.60, 1.70, 1.80, 1.90, 2.00, 2.20, 2.40, 2.60, 2.80];
+
+        // plot line on #mychart
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: x_coord,
+                datasets: [{
+                    label: '# of Votes',
+                    data: [-2.861030, -2.881138, -2.896661, -2.917296, -2.928109, -2.932502, -2.932825, -2.932998, -2.933029, -2.932948, -2.932747, -2.930379, -2.926438, -2.921631, -2.916436, -2.911170, -2.901175, -2.892510, -2.885395, -2.879755, -2.875393, -2.872075, -2.869580, -2.867718, -2.866330, -2.865296, -2.863701, -2.862888, -2.862444, -2.862184, -2.861918, -2.861795],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }, {
+                    label: '# of Votes',
+                    data: [-2.904236, -2.924612, -2.940398, -2.961529, -2.972775, -2.977519, -2.977901, -2.978130, -2.978221, -2.978179, -2.978022, -2.975811, -2.971930, -2.967091, -2.961783, -2.956339, -2.945856, -2.936624, -2.928959, -2.922839, -2.918087, -2.914472, -2.911757, -2.909734, -2.908232, -2.907115, -2.905401, -2.904532, -2.904061, -2.903787, -2.903506, -2.903376],
+                    backgroundColor: [
+                        'rgba(11,87,208,0.1)'
+                    ],
+                    borderColor: [
+                        'rgba(11,87,208,0.4)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        /*
+        def potential_2(D, a, r, r_eq):
+            m = len(a)
+            somatorio = 1
+            rho = r - r_eq
+            for i in range(1,m+1):
+                somatorio += a[i-1]*(rho**i)
+            #V_ryd = -D*somatorio*np.exp(-a[0]**2)
+            V_ryd = -D*somatorio*np.exp(-a[0]*rho)
+            return V_ryd
+            */
+        function potential_2(D, a, r, r_eq) {
+            var m = a.length;
+            var somatorio = 1;
+            var rho = r - r_eq;
+            for (var i = 1; i <= m; i++) {
+                somatorio += a[i - 1] * (rho ** i);
+            }
+            //V_ryd = -D*somatorio*np.exp(-a[0]**2)
+            var V_ryd = -D * somatorio * Math.exp(-a[0] * rho);
+            return V_ryd;
+        }
+
+        // on change #D
+        $("#D").on("input", function() {
+            var sliderValue = $(this).val();
+            D = parseInt($("#D_range").val()) * $("#D").val() / 100;
+            r_eq = 1.4632;
+            a = [-$("#a_range").val() + 2 * ($("#a_range").val() * $("#a").val() / 100), -$("#a_1_range").val() + 2 * ($("#a_1_range").val() * $("#a_1").val() / 100), -$("#a_2_range").val() + 2 * ($("#a_2_range").val() * $("#a_2").val() / 100), -$("#a_3_range").val() + 2 * ($("#a_3_range").val() * $("#a_3").val() / 100), -$("#a_4_range").val() + 2 * ($("#a_4_range").val() * $("#a_4").val() / 100), -$("#a_5_range").val() + 2 * ($("#a_5_range").val() * $("#a_5").val() / 100)];
+            console.log(a);
+            new_potential = [];
+            for (var i = 0; i < x_coord.length; i++) {
+                new_potential.push(potential_2(D, a, x_coord[i], r_eq));
+            }
+            // update chart
+            myChart.data.datasets[0].data = new_potential;
+            myChart.update();
+            $("#D_val").text(D);
+            $("#a_val").text(a);
+        });
+        $("#a").on("input", function() {
+            var sliderValue = $(this).val();
+            D = parseInt($("#D_range").val()) * $("#D").val() / 100;
+            r_eq = 1.4632;
+            a = [-$("#a_range").val() + 2 * ($("#a_range").val() * $("#a").val() / 100), -$("#a_1_range").val() + 2 * ($("#a_1_range").val() * $("#a_1").val() / 100), -$("#a_2_range").val() + 2 * ($("#a_2_range").val() * $("#a_2").val() / 100), -$("#a_3_range").val() + 2 * ($("#a_3_range").val() * $("#a_3").val() / 100), -$("#a_4_range").val() + 2 * ($("#a_4_range").val() * $("#a_4").val() / 100), -$("#a_5_range").val() + 2 * ($("#a_5_range").val() * $("#a_5").val() / 100)];
+            console.log(a);
+            new_potential = [];
+            for (var i = 0; i < x_coord.length; i++) {
+                new_potential.push(potential_2(D, a, x_coord[i], r_eq));
+            }
+            // update chart
+            myChart.data.datasets[0].data = new_potential;
+            myChart.update();
+            $("#D_val").text(D);
+            $("#a_val").text(a);
+        });
+        $("#a_1").on("input", function() {
+            var sliderValue = $(this).val();
+            D = parseInt($("#D_range").val()) * $("#D").val() / 100;
+            r_eq = 1.4632;
+            a = [-$("#a_range").val() + 2 * ($("#a_range").val() * $("#a").val() / 100), -$("#a_1_range").val() + 2 * ($("#a_1_range").val() * $("#a_1").val() / 100), -$("#a_2_range").val() + 2 * ($("#a_2_range").val() * $("#a_2").val() / 100), -$("#a_3_range").val() + 2 * ($("#a_3_range").val() * $("#a_3").val() / 100), -$("#a_4_range").val() + 2 * ($("#a_4_range").val() * $("#a_4").val() / 100), -$("#a_5_range").val() + 2 * ($("#a_5_range").val() * $("#a_5").val() / 100)];
+            console.log(a);
+            new_potential = [];
+            for (var i = 0; i < x_coord.length; i++) {
+                new_potential.push(potential_2(D, a, x_coord[i], r_eq));
+            }
+            // update chart
+            myChart.data.datasets[0].data = new_potential;
+            myChart.update();
+            $("#D_val").text(D);
+            $("#a_val").text(a);
+        });
+        $("#a_2").on("input", function() {
+            var sliderValue = $(this).val();
+            D = parseInt($("#D_range").val()) * $("#D").val() / 100;
+            r_eq = 1.4632;
+            a = [-$("#a_range").val() + 2 * ($("#a_range").val() * $("#a").val() / 100), -$("#a_1_range").val() + 2 * ($("#a_1_range").val() * $("#a_1").val() / 100), -$("#a_2_range").val() + 2 * ($("#a_2_range").val() * $("#a_2").val() / 100), -$("#a_3_range").val() + 2 * ($("#a_3_range").val() * $("#a_3").val() / 100), -$("#a_4_range").val() + 2 * ($("#a_4_range").val() * $("#a_4").val() / 100), -$("#a_5_range").val() + 2 * ($("#a_5_range").val() * $("#a_5").val() / 100)];
+            console.log(a);
+            new_potential = [];
+            for (var i = 0; i < x_coord.length; i++) {
+                new_potential.push(potential_2(D, a, x_coord[i], r_eq));
+            }
+            // update chart
+            myChart.data.datasets[0].data = new_potential;
+            myChart.update();
+            $("#D_val").text(D);
+            $("#a_val").text(a);
+        });
+        $("#a_3").on("input", function() {
+            var sliderValue = $(this).val();
+            D = parseInt($("#D_range").val()) * $("#D").val() / 100;
+            r_eq = 1.4632;
+            a = [-$("#a_range").val() + 2 * ($("#a_range").val() * $("#a").val() / 100), -$("#a_1_range").val() + 2 * ($("#a_1_range").val() * $("#a_1").val() / 100), -$("#a_2_range").val() + 2 * ($("#a_2_range").val() * $("#a_2").val() / 100), -$("#a_3_range").val() + 2 * ($("#a_3_range").val() * $("#a_3").val() / 100), -$("#a_4_range").val() + 2 * ($("#a_4_range").val() * $("#a_4").val() / 100), -$("#a_5_range").val() + 2 * ($("#a_5_range").val() * $("#a_5").val() / 100)];
+            console.log(a);
+            new_potential = [];
+            for (var i = 0; i < x_coord.length; i++) {
+                new_potential.push(potential_2(D, a, x_coord[i], r_eq));
+            }
+            // update chart
+            myChart.data.datasets[0].data = new_potential;
+            myChart.update();
+            $("#D_val").text(D);
+            $("#a_val").text(a);
+        });
+        $("#a_4").on("input", function() {
+            var sliderValue = $(this).val();
+            D = parseInt($("#D_range").val()) * $("#D").val() / 100;
+            r_eq = 1.4632;
+            a = [-$("#a_range").val() + 2 * ($("#a_range").val() * $("#a").val() / 100), -$("#a_1_range").val() + 2 * ($("#a_1_range").val() * $("#a_1").val() / 100), -$("#a_2_range").val() + 2 * ($("#a_2_range").val() * $("#a_2").val() / 100), -$("#a_3_range").val() + 2 * ($("#a_3_range").val() * $("#a_3").val() / 100), -$("#a_4_range").val() + 2 * ($("#a_4_range").val() * $("#a_4").val() / 100), -$("#a_5_range").val() + 2 * ($("#a_5_range").val() * $("#a_5").val() / 100)];
+            console.log(a);
+            new_potential = [];
+            for (var i = 0; i < x_coord.length; i++) {
+                new_potential.push(potential_2(D, a, x_coord[i], r_eq));
+            }
+            // update chart
+            myChart.data.datasets[0].data = new_potential;
+            myChart.update();
+            $("#D_val").text(D);
+            $("#a_val").text(a);
+        });
+        $("#a_5").on("input", function() {
+            var sliderValue = $(this).val();
+            D = parseInt($("#D_range").val()) * $("#D").val() / 100;
+            r_eq = 1.4632;
+            a = [-$("#a_range").val() + 2 * ($("#a_range").val() * $("#a").val() / 100), -$("#a_1_range").val() + 2 * ($("#a_1_range").val() * $("#a_1").val() / 100), -$("#a_2_range").val() + 2 * ($("#a_2_range").val() * $("#a_2").val() / 100), -$("#a_3_range").val() + 2 * ($("#a_3_range").val() * $("#a_3").val() / 100), -$("#a_4_range").val() + 2 * ($("#a_4_range").val() * $("#a_4").val() / 100), -$("#a_5_range").val() + 2 * ($("#a_5_range").val() * $("#a_5").val() / 100)];
+            console.log(a);
+            new_potential = [];
+            for (var i = 0; i < x_coord.length; i++) {
+                new_potential.push(potential_2(D, a, x_coord[i], r_eq));
+            }
+            // update chart
+            myChart.data.datasets[0].data = new_potential;
+            myChart.update();
+            $("#D_val").text(D);
+            $("#a_val").text(a);
+        });
+    </script>
+</body>
+
+</html>

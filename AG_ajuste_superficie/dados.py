@@ -3,7 +3,7 @@ class Dados():
     # define informações da população
     mudanca_limites = 2
     n_a = 3
-    NV = 2+n_a  # número de variáveis
+    NV = 3  # número de variáveis
     N = 1000 # numero de individuos
     n_bits = 16 # número de bits por variável em cada indivíduo
     percent_elite = 0.010 # percentual dos melhores indivíduos que serão conservados para a próxima geração

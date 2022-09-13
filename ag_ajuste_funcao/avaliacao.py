@@ -136,12 +136,12 @@ table_s2 = [[1.00, -2.861030, -2.904236, -2.90461],
             [7.00, -2.861918, -2.903506, -2.90370],
             [8.00, -2.861795, -2.903376, -2.90396]
             ]
-"""x = [table_s2[i][0] for i in range(len(table_s2))]
+x = [table_s2[i][0] for i in range(len(table_s2))]
 y = [table_s2[i][1] for i in range(len(table_s2))]
 y_other = [potential_2(1.289183, [0.675107, 1.244958, 1.466933],x[i],  1.453162) for i in range(len(x))]
 
 
-plt.plot(x, y, 'o', color='black')
-plt.plot(x, y_other, 'o', color='red')
-plt.show()
-"""
+#plt.plot(x, y, 'o', color='black')
+#plt.plot(x, y_other, 'o', color='red')
+#plt.show()
+

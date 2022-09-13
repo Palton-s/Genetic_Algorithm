@@ -46,7 +46,6 @@ class GA(Dados):
                 n_coleta = 20
                 for j in range(n_coleta):
                     limites_grafico[k].append(aux.converte_individuo(X[-(j+1)], self.limites)[k])
-
             dados_grafico_limites.append([i,limites_grafico])
             # write on file dados_grafico_evolucao
             self.add_to_file("dados_grafico_evolucao.csv", limites_grafico)
@@ -83,8 +82,7 @@ class GA(Dados):
                 self.write_on_file("Geração: " + str(i) + " - Melhor: " +
                                    str(Y[-1]) + " - Valores: " + str(values[-1]))
                 average_evaluate = np.mean(Y[-int(len(Y)/2)])
-                print("Geração: " + str(i) + " - Melhor: " +
-                      str(round(Y[-1], 2)) + " - Valores: " + str([round(value, 2) for value in aux.converte_individuo(X[-1], self.limites)]))
+                #print("Geração: " + str(i) + " - Melhor: " + str(round(Y[-1], 2)) + " - Valores: " + str([round(value, 2) for value in aux.converte_individuo(X[-1], self.limites)]))
                 biggest_value = [max([selected_values[i][j] for i in range(
                     len(selected_values))]) for j in range(self.NV)]
                 smallest_value = [min([selected_values[i][j] for i in range(
@@ -154,7 +152,8 @@ class GA(Dados):
         self.best_individual = aux.converte_individuo(X[-1], self.limites)
         self.best_evaluation = Y[-1]
         self.values = aux.converte_populacao(X, self.limites)
-        print("Melhor indivíduo: ", self.best_evaluation)
+        #print("Melhor indivíduo: ", self.best_evaluation)
+        self.atualiza_count_thread("count.csv")
 
     def add_to_file(self, file_name, array, delimiter=";"):
         # add array data to a csv file
@@ -244,7 +243,27 @@ class GA(Dados):
         with open("melhores_avaliacoes.log", 'a') as f:
             f.write(text)
             f.write("\n")
+    
+    def atualiza_count_thread(self, file_name):
+        time.sleep(1)
+        divider = " ---- "
+        # read the last line
+        with open(file_name, "r") as f:
+            # if file is empty, write 1
+            readed = f.read()
+            if readed == "":
+                with open(file_name, "w") as f:
+                    f.write("1"+divider+str(self.best_evaluation)+divider+str(self.limites))
+                return
+        with open(file_name, "r") as f:
+            last_value = f.readlines()[-1]
+            last_value = last_value.split(divider)[0]
+            # add 1 to the last value
+            last_value = int(last_value)+1
+            # write the new value on file
+        with open(file_name, "a") as f:
+            f.write(str(last_value)+divider+str(self.best_evaluation)+divider+str(self.limites)+"\n")
 
 
-#ga = GA(10, mudar_limites=True)
-#ga.plot_result()
+ga = GA(10000, mudar_limites=True)
+ga.plot_result()
