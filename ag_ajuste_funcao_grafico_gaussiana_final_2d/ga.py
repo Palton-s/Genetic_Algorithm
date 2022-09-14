@@ -74,8 +74,11 @@ class GA(Dados):
                 self.taxa_de_mutacao = 0.5 # taxa de mutação
                 self.intensidade_da_mutacao = 0.5 # intensidade da mutação"""
             if mudar_limites and i % self.mudanca_limites == 0 and i != 0:
-                min_ranges = [1+1000/(i/2), 1+1000/(i/2)]
-                max_ranges = [250/(i/3), 250/(i/3)]
+                min_ranges = [50/i,50/i,50/i,50/i]
+                max_ranges = [50/i,50/i,50/i,50/i]
+                """for n in range(self.NV):
+                    min_ranges.append(1+50/i)
+                    max_ranges.append(1+50/i)"""
                 """for m in range(self.NV):
                     min_ranges.append(100)
                     max_ranges.append(500)"""
@@ -115,15 +118,14 @@ class GA(Dados):
                             k, smallest_value[k]-abs(0.05*range_), biggest_value[k]+abs(0.05*range_))
                 X = [aux.desconverve_individuo(
                     values[k], self.limites, self.n_bits) for k in range(self.N)]
+                teste__ = aux.converte_populacao(X, self.limites)
+                print("jaja")
             
             average_evaluate = np.mean(Y[-int(len(Y)/2)])
             # read json './dados_grafico_evolucao.json'
-            json_data = self.readJSON("./dados_geracao.json")
-            individuos___ = aux.converte_populacao(X[-50:], self.limites)
-            for m in range(len(individuos___)):
-                individuos___[m] = sorted(individuos___[m])
-            json_data.append([i, self.limites, aux.converte_populacao(X[-50:], self.limites), Y[-50:]])
-            self.saveJSON(json_data, './dados_geracao.json')
+            #json_data = self.readJSON("./dados_geracao.json")
+            #json_data.append([i, self.limites, aux.converte_populacao(X[-50:], self.limites), sorted(Y[-50:])])
+            #self.saveJSON(json_data, './dados_geracao.json')
             print("Geração: " + str(i) + " - Media ava: " + str(average_evaluate) + " - Melhor: " + str(round(Y[-1], 6)) + " - Valores: " + str([round(value, 6) for value in aux.converte_individuo(X[-1], self.limites)])+ ' - Limites: '+str(self.limites))
             # write on file "grafico_convergencia.csv"
 
@@ -185,54 +187,19 @@ class GA(Dados):
             return json.load(f)
     
     def plot_result(self):
-        init = 1
-        table_s2 = [[1.00, -2.861030, -2.904236, -2.90461],
-            [1.05, -2.881138, -2.924612, -2.92505],
-            [1.10, -2.896661, -2.940398, -2.94060],
-            [1.20, -2.917296, -2.961529, -2.96182],
-            [1.30, -2.928109, -2.972775, -2.97320],
-            [1.40, -2.932502, -2.977519, -2.97798],
-            [1.42, -2.932825, -2.977901, -2.97835],
-            [1.44, -2.932998, -2.978130, -2.97841],
-            [1.4632, -2.933029, -2.978221, -2.97869],
-            [1.48, -2.932948, -2.978179, -2.97860],
-            [1.50, -2.932747, -2.978022, -2.97844],
-            [1.60, -2.930379, -2.975811, -2.97626],
-            [1.70, -2.926438, -2.971930, -2.97230],
-            [1.80, -2.921631, -2.967091, -2.96761],
-            [1.90, -2.916436, -2.961783, -2.96212],
-            [2.00, -2.911170, -2.956339, -2.95674],
-            [2.20, -2.901175, -2.945856, -2.94606],
-            [2.40, -2.892510, -2.936624, -2.93717],
-            [2.60, -2.885395, -2.928959, -2.92956],
-            [2.80, -2.879755, -2.922839, -2.92341],
-            [3.00, -2.875393, -2.918087, -2.91860],
-            [3.20, -2.872075, -2.914472, -2.91507],
-            [3.40, -2.869580, -2.911757, -2.91220],
-            [3.60, -2.867718, -2.909734, -2.91027],
-            [3.80, -2.866330, -2.908232, -2.90862],
-            [4.00, -2.865296, -2.907115, -2.90767],
-            [4.50, -2.863701, -2.905401, -2.90589],
-            [5.00, -2.862888, -2.904532, -2.90504],
-            [5.50, -2.862444, -2.904061, -2.90431],
-            [6.00, -2.862184, -2.903787, -2.90439],
-            [7.00, -2.861918, -2.903506, -2.90370],
-            [8.00, -2.861795, -2.903376, -2.90396]
-            ]
-        """for i in range(15):
-            table_s2.append([init,self.potential(45, 0.5, 3, init)])
-            init += 0.2"""
 
-        x = [row[0] for row in table_s2]
-        y = [row[1] for row in table_s2]
-        plt.plot(x, y, label='Dados da curva')
+        x = [i/20 for i in range(0, 50)]
+        y = [self.potential(6.6282, 1.3941, 1.1352, 3.5231, x[i]) for i in range(len(x))]
+        
         best = self.best_individual
-        new_y = []
-        for i in range(len(x)):
-            a = [best[i] for i in range(1, len(best)-1)]
-            new_y.append(self.potential_2(best[0], a, x[i], best[-1]))
-        plt.plot(x, new_y, label='Melhor indivíduo', color="red")
-
+        bests = self.values[-100:]
+        plt.title("Ajuste dos melhores indivíduos")
+        for j in range(len(bests)):
+            new_y = []
+            for i in range(len(x)):
+                new_y.append(self.potential(bests[j][0], bests[j][1], bests[j][2], bests[j][3], x[i]))
+            plt.plot(x, new_y, label='Melhor indivíduo', color='red', linewidth=0.5, alpha=0.2)
+        plt.plot(x, y, label='Dados da curva')
         """for i in range(25):
             A = self.values[-i][0]
             B = self.values[-i][1]
@@ -249,8 +216,8 @@ class GA(Dados):
         plt.show()
 
     # potential(individuo[0], [individuo[1], individuo[2], individuo[3]], R[i], individuo[4])
-    def potential(self, A, B, C, x):
-        result = A + (1/(B*np.sqrt(2*np.pi)))*np.exp(-((x-C)**2)/(2*(B**2)))
+    def potential(self,A, B, C, D, x):
+        result = A + B*(x-C)*np.exp(-D*(x-B)**2)
         return result
 
     def potential_2(self, D, a, r, r_eq):
@@ -296,7 +263,7 @@ class GA(Dados):
         #plot
         geracoes = [data[i][0] for i in range(len(data))]
 
-        variaveis = [data[i][2] for i in range(len(data))]
+        
         parametros = []
         n_param = len(data[0][1])
         n_geracoes = len(data)
@@ -319,12 +286,17 @@ class GA(Dados):
             limites_superiores.append(limites_sup)
 
         for i in range(n_param):
-            plt.plot(geracoes, limites_inferiores[i], label="limite inferior "+str(i), color="red")
-            plt.plot(geracoes, limites_superiores[i], label="limite superior "+str(i), color="red")
+            plt.plot(geracoes, limites_inferiores[i], label="limite inferior", color="red")
+            plt.plot(geracoes, limites_superiores[i], label="limite superior", color="green")
             for j in range(n_individuos):
                 individuo = [parametros[i][k][j] for k in range(n_geracoes)]
                 plt.plot(geracoes, individuo, color="blue", alpha=0.2)
-            plt.legend()
+            # add title
+            plt.title("Evolução do parâmetro "+str(i+1))
+            # x label
+            plt.xlabel("Geração")
+            # y label
+            plt.ylabel("Valor do parâmetro")
             plt.show()
         avaliacoes = [data[i][3] for i in range(len(data))]
         individuo_avaliacoes = []
@@ -337,7 +309,7 @@ class GA(Dados):
         plt.xlabel("Geração")
         plt.ylabel("Avaliação")
         plt.show()
-ga = GA(150, mudar_limites=True)
+ga = GA(1, mudar_limites=False)
 
 ga.plot_convergencia()
-#ga.plot_result()
+ga.plot_result()

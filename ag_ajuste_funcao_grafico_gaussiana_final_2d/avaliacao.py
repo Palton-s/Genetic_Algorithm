@@ -11,22 +11,23 @@ def avaliacao(X, limites):
     # converte os cromossomos binários para decimais
     X = aux.converte_populacao(X, limites)
     # avalia quão bons os indivíduos são com base em uma gaussiana de variaveis dimensões
+    x = [i/20 for i in range(0, 50)]
+    y = [potential(6.6282, 1.3941, 1.1352, 3.5231, x[i]) for i in range(len(x))]
 
     for individuo in X: 
-        r1 = (individuo[0]+1.5)**2 + (individuo[1]-1.5)**2
-        r2 = (individuo[0]-1.0)**2 + (individuo[1]+1.0)**2
-        z = 0
-        z += 0.8*np.exp(-(r1 )/(50**2))
-        z += 0.879008*np.exp(-(r2 )/(30**2))
-        avaliacao = z
+
+        quadratic_sum = 0
+        for i in range(len(x)):
+            potential_ryd = potential(individuo[0], individuo[1], individuo[2], individuo[3], x[i])
+            quadratic_sum += (potential_ryd - y[i])**2
+
+        avaliacao = quadratic_sum/len(x)
         Y.append(avaliacao.real)
     return Y
 
-def potential(A, B, C, x):
-    result = A + (1/(B*np.sqrt(2*np.pi)))*np.exp(-((x-C)**2)/(2*(B**2)))
-
+def potential(A, B, C, D, x):
+    result = A + B*(x-C)*np.exp(-D*(x-B)**2)
     return result
-
 
 def potential_2(D, a, r, r_eq):
     m = len(a)
@@ -72,12 +73,16 @@ table_s2 = [[1.00, -2.861030, -2.904236, -2.90461],
             [7.00, -2.861918, -2.903506, -2.90370],
             [8.00, -2.861795, -2.903376, -2.90396]
             ]
-x = [table_s2[i][0] for i in range(len(table_s2))]
-y = [table_s2[i][1] for i in range(len(table_s2))]
-y_other = [potential_2(1.289183, [0.675107, 1.244958, 1.466933],x[i],  1.453162) for i in range(len(x))]
+
+#x = [table_s2[i][0] for i in range(len(table_s2))]
+#y = [table_s2[i][1] for i in range(len(table_s2))]
+#y_other = [potential_2(1.289183, [0.675107, 1.244958, 1.466933],x[i],  1.453162) for i in range(len(x))]
 
 
-#plt.plot(x, y, 'o', color='black')
+"""x = [i/20 for i in range(0, 50)]
+y = [potential(6.6282, 1.3941, 1.1352, 3.5231, x[i]) for i in range(len(x))]
+
+plt.plot(x, y, 'o', color='black')
 #plt.plot(x, y_other, 'o', color='red')
-#plt.show()
+plt.show()"""
 

@@ -1,45 +1,8 @@
 import matplotlib.pyplot as plt
-from cmath import sqrt
 import numpy as np
-import funcoes_auxiliares as aux
-from dados import *
 
-
-def avaliacao(X, limites):
-
-    Y = []
-    # converte os cromossomos binários para decimais
-    X = aux.converte_populacao(X, limites)
-    # avalia quão bons os indivíduos são com base em uma gaussiana de variaveis dimensões
-
-    for individuo in X: 
-        r1 = (individuo[0]+1.5)**2 + (individuo[1]-1.5)**2
-        r2 = (individuo[0]-1.0)**2 + (individuo[1]+1.0)**2
-        z = 0
-        z += 0.8*np.exp(-(r1 )/(50**2))
-        z += 0.879008*np.exp(-(r2 )/(30**2))
-        avaliacao = z
-        Y.append(avaliacao.real)
-    return Y
-
-def potential(A, B, C, x):
-    result = A + (1/(B*np.sqrt(2*np.pi)))*np.exp(-((x-C)**2)/(2*(B**2)))
-
-    return result
-
-
-def potential_2(D, a, r, r_eq):
-    m = len(a)
-    somatorio = 1
-    rho = r - r_eq
-    for i in range(1,m+1):
-        somatorio += a[i-1]*(rho**i)
-    #V_ryd = -D*somatorio*np.exp(-a[0]**2)
-    V_ryd = -D*somatorio*np.exp(-a[0]*rho)
-    return V_ryd
-
-
-table_s2 = [[1.00, -2.861030, -2.904236, -2.90461],
+def plot_result(values):
+    table_s2 = [[1.00, -2.861030, -2.904236, -2.90461],
             [1.05, -2.881138, -2.924612, -2.92505],
             [1.10, -2.896661, -2.940398, -2.94060],
             [1.20, -2.917296, -2.961529, -2.96182],
@@ -72,12 +35,35 @@ table_s2 = [[1.00, -2.861030, -2.904236, -2.90461],
             [7.00, -2.861918, -2.903506, -2.90370],
             [8.00, -2.861795, -2.903376, -2.90396]
             ]
-x = [table_s2[i][0] for i in range(len(table_s2))]
-y = [table_s2[i][1] for i in range(len(table_s2))]
-y_other = [potential_2(1.289183, [0.675107, 1.244958, 1.466933],x[i],  1.453162) for i in range(len(x))]
+    D = values[0]
 
+    r = [row[0] for row in table_s2]
+    HF = [row[1] for row in table_s2]
+    r_eq = values[4]
+    #a = [values[1],values[2],values[3]]
+    a = []
+    for i in range(len(values)):
+        if i != 0:
+            a.append(values[i])
 
-#plt.plot(x, y, 'o', color='black')
-#plt.plot(x, y_other, 'o', color='red')
-#plt.show()
+    potentials = [potential(D,a,r_,r_eq) for r_ in r]
 
+    print(potentials)
+
+    #plot r x potentials and r x HF in sabe plot
+    plt.plot(r,potentials, label='potential')
+    plt.plot(r,HF, label='HF')
+    plt.legend()
+    plt.show()
+
+def potential(D,a,r,r_eq):
+    m = len(a)
+    somatorio = 1
+    for i in range(m):
+        somatorio += a[i]*(r-r_eq)
+    #V_ryd = -D*somatorio*np.exp(-a[0]**2)
+    V_ryd = -D*somatorio*np.exp(-a[0]*(r-r_eq))
+    return V_ryd
+
+values = [-1347825.309800202, -0.00029239678032795145, 189249634.02453166, 163818286079362.62, 198416.89542961254]
+plot_result(values)

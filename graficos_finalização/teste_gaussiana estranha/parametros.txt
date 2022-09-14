@@ -1,0 +1,10 @@
+potential(6.6282, 1.3941, 1.1352, 3.5231, x[i])
+    mudanca_limites = 10
+    NV = 4  # número de variáveis
+    N = 300 # numero de individuos
+    n_bits = 12 # número de bits por variável em cada indivíduo
+    percent_elite = 0.1 # percentual dos melhores indivíduos que serão conservados para a próxima geração
+    n_cortes_no_cruzamento = int(n_bits/3) # número de pontos de corte no cruzamento
+    n_geracoes = 800 # número de gerações
+    taxa_de_mutacao = 0.5 # taxa de mutação
+    intensidade_da_mutacao = 0.5  # intensidade da mutação

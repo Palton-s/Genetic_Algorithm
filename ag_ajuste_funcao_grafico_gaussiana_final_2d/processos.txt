@@ -1,0 +1,1 @@
+- [] verificar o tempo de execução de um AG de 100 geracoes no servidor do LCC
