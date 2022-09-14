@@ -3,7 +3,7 @@ class Dados():
     # define informações da população
     mudanca_limites = 40
     NV = 2+10  # número de variáveis
-    N = 500 # numero de individuos
+    N = 30 # numero de individuos
     n_bits = 12 # número de bits por variável em cada indivíduo
     percent_elite = 0.1 # percentual dos melhores indivíduos que serão conservados para a próxima geração
     n_cortes_no_cruzamento = int(n_bits/3) # número de pontos de corte no cruzamento

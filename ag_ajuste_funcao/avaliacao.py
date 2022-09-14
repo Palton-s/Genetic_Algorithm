@@ -78,8 +78,7 @@ def avaliacao(X, limites, until):
         to_range = int(until*len(R))
         for i in range(to_range):
             a = [individuo[i] for i in range(1, len(individuo)-1)]
-            potential_ryd = potential_2(
-                individuo[0], a , R[i], individuo[-1])
+            potential_ryd = potential_2(individuo[0], a , R[i], individuo[-1])
             quadratic_sum += (potential_ryd - HF[i])**2
         quadratic_mean = quadratic_sum
         avaliacao = quadratic_mean

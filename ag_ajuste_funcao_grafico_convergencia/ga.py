@@ -123,9 +123,9 @@ class GA(Dados):
             
             average_evaluate = np.mean(Y[-int(len(Y)/2)])
             # read json './dados_grafico_evolucao.json'
-            json_data = self.readJSON("./dados_geracao.json")
-            json_data.append([i, self.limites, aux.converte_populacao(X[-50:], self.limites)])
-            self.saveJSON(json_data, './dados_geracao.json')
+            #json_data = self.readJSON("./dados_geracao.json")
+            #json_data.append([i, self.limites, aux.converte_populacao(X[-50:], self.limites)])
+            #self.saveJSON(json_data, './dados_geracao.json')
             print("Geração: " + str(i) + " - Media ava: " + str(average_evaluate) + " - Melhor: " + str(round(Y[-1], 6)) + " - Valores: " + str([round(value, 6) for value in aux.converte_individuo(X[-1], self.limites)]))
             # write on file "grafico_convergencia.csv"
 
@@ -330,7 +330,7 @@ class GA(Dados):
             plt.show()
 
         melhores = [data[i][1] for i in range(len(data))]
-ga = GA(210, mudar_limites=True, until=0.5)
+ga = GA(1, mudar_limites=True, until=0.5)
 
 ga.plot_convergencia()
 ga.plot_result()
