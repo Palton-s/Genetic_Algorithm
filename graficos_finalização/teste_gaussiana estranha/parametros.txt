@@ -8,3 +8,4 @@ potential(6.6282, 1.3941, 1.1352, 3.5231, x[i])
     n_geracoes = 800 # número de gerações
     taxa_de_mutacao = 0.5 # taxa de mutação
     intensidade_da_mutacao = 0.5  # intensidade da mutação
+A + B*(x-C)*np.exp(-D*(x-B)**2)

@@ -151,17 +151,34 @@ def threeDPoint(pos):
     return sphere
 
 
+
 class ThreeDSurfacePlot(ThreeDScene):
     def construct(self):
         #resolution_fa = 50
         
-        resolution_fa = 64
-        self.set_camera_orientation(phi=45 * DEGREES, theta=10 * DEGREES)
+        resolution_fa = 16
+        self.set_camera_orientation(phi=0 * DEGREES, theta=0 * DEGREES)
+
+        def avalia(x__, y__):
+            
+            individuo = [ x__, y__ ]
+            # avalia quão bons os indivíduos são com base em uma gaussiana de variaveis dimensões
+            x = [i/2 for i in range(-25, 25)]
+            y = [np.sin(x[i])*np.exp((-x[i]**2)/40) for i in range(len(x))]
+
+            quadratic_sum = 0
+            for i in range(len(x)):
+                potential_ryd = individuo[0]*np.sin(x[i])*np.exp((-x[i]**2)/individuo[1])
+                quadratic_sum += (potential_ryd - y[i])**2
+
+            z = quadratic_sum/len(x)
+            return np.array([x__, y__, z])
+
 
         def param_gauss(u, v):
             x = u
             y = v
-            sigma, mu = 1, [0.0, 0.0]
+            """sigma, mu = 1, [0.0, 0.0]
             d = np.linalg.norm(np.array([x, y]))
             #z = (np.cos(3*math.pi*d)**2)*np.exp(-(d ** 2 ))
             #z = np.exp(-(d ** 2 ))
@@ -175,7 +192,8 @@ class ThreeDSurfacePlot(ThreeDScene):
             z += 1.5345*np.exp(-(r3 )/(0.03**2))
             for i in range(len(random_points)):
                 #z += 0.6*np.exp(-((x-random_points[i][0])**2 + (y-random_points[i][1])**2)/(0.06**2))
-                z += ((i/len(random_points))*0.3+0.3)*np.exp(-((x-random_points[i][0])**2 + (y-random_points[i][1])**2)/(0.06**2))
+                z += ((i/len(random_points))*0.3+0.3)*np.exp(-((x-random_points[i][0])**2 + (y-random_points[i][1])**2)/(0.06**2))"""
+            z = np.exp(-(x**2 + y**2))
             return np.array([x, y, z])
 
         """gauss_plane = Surface(
@@ -191,7 +209,7 @@ class ThreeDSurfacePlot(ThreeDScene):
         gauss_plane.set_opacity(0.9)
         self.add(gauss_plane)
         """
-        # 9 gauss planes
+        """# 9 gauss planes
         gaus_planes = VGroup()
         n_cortes = 9
         range_ = 2.5
@@ -209,21 +227,32 @@ class ThreeDSurfacePlot(ThreeDScene):
                 gauss_plane.set_opacity(0.9)
                 #gauss_plane.shift((i-1)*RIGHT*2+(j-1)*UP*2)
                 gaus_planes.add(gauss_plane)
-        self.add(gaus_planes)
+        self.add(gaus_planes)"""
+        gauss_plane = Surface(
+                    avalia,
+                    resolution=(resolution_fa, resolution_fa),
+                    v_range=[0.01, 1.5],
+                    u_range=[38, 42]
+                )
+        gauss_plane.set_fill(RED)     
+        gauss_plane.move_to(ORIGIN)
+
+        #gauss_plane.scale(0.3, about_point=ORIGIN)                  
+        self.add(gauss_plane)
         
 
-        # space each gauss plane by 1
+        """# space each gauss plane by 1
         gaus_planes.arrange_in_grid(buff=0.2)
         # move all gauss bottom to z = 0
         for i in range(len(gaus_planes)):
             # move bottom to z = 0
             bottom_point = gaus_planes[i].get_corner(DOWN)
-            gaus_planes[i].shift(-bottom_point[2]*UP)
+            gaus_planes[i].shift(-bottom_point[2]*UP)"""
 
 
         #gauss_plane.set_stroke(RED, 1)
         #gauss_plane.set_sheen(0.3, 0.3, 0.3)
-        axes = ThreeDAxes(x_range=[-2, 2], y_range=[-2, 2], z_range=[-2, 2])
+        #axes = ThreeDAxes(x_range=[-2, 2], y_range=[-2, 2], z_range=[-2, 2])
         #self.add(axes)
 
         """individuos = [[-1.94818169021358, -1.2996162097828505, 9.78365732898492e-05], [-0.6738277560368546, -1.858992457961019, 0.0009656423624013115], [1.7669463074962009, -1.8027746815319503, 0.0009998311132622755], [-0.08099580123949846, -1.989600096966404, 0.0014507642914383847], [-1.7131797734189997, 1.5142939127099289, 0.0026665844683042674], [-1.820715487441677, -0.22964778857965262, 0.002690290041583342], [-1.9048970997411292, 0.5092756907800364, 0.003077566478173798], [-1.017061552714945, -1.1451713379701873, 0.006683827436349807], [-1.5043037530816084, -0.18280102392420794, 0.011294371520461994], [-1.4387239371362028, 0.12432738293988033, 0.020246356660157335], [1.9891620982084928, 1.4054179035542411, 0.047960125367869845], [0.8541023225406481, -0.9943571908554452, 0.0945627287227092], [-0.8354301268169206, 1.1599233678618268, 0.10873163736784396], [0.12975264716703494, 1.922021614893484, 0.11541411998499534], [-0.20940975004158435, -0.6198323236773322, 0.17251231968336028], [1.7514276363244834, 0.7277042835279977, 0.19831068345492064], [1.6862392340218775, 0.9506940387811511, 0.199829927454382], [-0.35524463030427844, -0.42461795476839725, 0.20466889745517297], [0.07057466092604425, -0.5462169195884479, 0.27832216630283474], [0.9258397711011752, -0.5250847266456002, 0.29166826320742467], [1.325069601708611, -0.1736034259912329, 0.32158884662512943], [0.8337295473877617, 1.4568396812937219, 0.35810910139898783], [0.09046087139512782, 1.3316638326306673, 0.4234215481859689], [0.4168260548334004, 1.3889532736941135, 0.45060875209687734], [0.010198301541597843, 1.1212470382112336, 0.5348047316400706], [-0.28586302086748816, 0.5306838101162494, 0.5387400083241476], [1.1611230243241155, 0.6110201251316236, 0.6380050237349056], [0.24500871215859776, 0.8713926985376408, 0.8163165311588785], [0.8536897044782377, 0.6444072255495357, 0.8642010384574683], [0.28431195542240095, 0.3299474683059844, 0.9273361144635903]]
@@ -234,6 +263,7 @@ class ThreeDSurfacePlot(ThreeDScene):
             z = individuos[i][2]
             sphere = threeDPoint([x,y,z])
             self.add(sphere)"""
+    
 
 class superficies_separadas(ThreeDScene):
     def construct(self):

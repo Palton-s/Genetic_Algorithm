@@ -13,11 +13,14 @@ def avaliacao(X, limites):
     # avalia quão bons os indivíduos são com base em uma gaussiana de variaveis dimensões
 
     for individuo in X: 
-        r1 = (individuo[0]+1.5)**2 + (individuo[1]-1.5)**2
-        r2 = (individuo[0]-1.0)**2 + (individuo[1]+1.0)**2
+        r1 = 0
+        for i in range(len(individuo)):
+            r1 += individuo[i]**2
+        #r2 = (individuo[0]-0.3)**2 + (individuo[1]-0.3)**2
         z = 0
-        z += 0.8*np.exp(-(r1 )/(50**2))
-        z += 0.879008*np.exp(-(r2 )/(30**2))
+        #z += 0.8*np.exp(-(r1 )/(0.3**2))
+        #z += 1*np.exp(-(r2 )/(0.03**2))
+        z += 1*np.exp(-(r1 )/(1**2))
         avaliacao = z
         Y.append(avaliacao.real)
     return Y
@@ -39,7 +42,7 @@ def potential_2(D, a, r, r_eq):
     return V_ryd
 
 
-table_s2 = [[1.00, -2.861030, -2.904236, -2.90461],
+"""table_s2 = [[1.00, -2.861030, -2.904236, -2.90461],
             [1.05, -2.881138, -2.924612, -2.92505],
             [1.10, -2.896661, -2.940398, -2.94060],
             [1.20, -2.917296, -2.961529, -2.96182],
@@ -74,7 +77,7 @@ table_s2 = [[1.00, -2.861030, -2.904236, -2.90461],
             ]
 x = [table_s2[i][0] for i in range(len(table_s2))]
 y = [table_s2[i][1] for i in range(len(table_s2))]
-y_other = [potential_2(1.289183, [0.675107, 1.244958, 1.466933],x[i],  1.453162) for i in range(len(x))]
+y_other = [potential_2(1.289183, [0.675107, 1.244958, 1.466933],x[i],  1.453162) for i in range(len(x))]"""
 
 
 #plt.plot(x, y, 'o', color='black')

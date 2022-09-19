@@ -309,7 +309,7 @@ class GA(Dados):
         plt.xlabel("Geração")
         plt.ylabel("Avaliação")
         plt.show()
-ga = GA(1, mudar_limites=False)
+ga = GA(350, mudar_limites=True)
 
 ga.plot_convergencia()
 ga.plot_result()

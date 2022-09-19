@@ -119,3 +119,77 @@ def roleta(X,Y,percent_individuos):
             filhos.append(X[n_individuos-1])
     # retorna a população de filhos
     return filhos
+
+import funcoes_auxiliares as aux
+import numpy as np
+
+
+def get_best_desvio(n_cortes__):
+    cortes = [i+1 for i in range(n_cortes__ -1)]
+    desvios_padrao = []
+    medias = []
+    sup = []
+    inf = []
+    dados_gerais = []
+    for i in range(n_cortes__ -1):
+        cromossomo_1 = []
+        cromossomo_2 = []
+        
+        for j in range(n_cortes__):
+            cromossomo_1.append(0)
+            cromossomo_2.append(1)
+        individuo_1 = [cromossomo_1]
+        individuo_2 = [cromossomo_2]
+        n_cortes = cortes[i]
+
+
+        dados = []
+        for j in range(10000):
+            ranges = [[-100,100]]
+            lim_inf = -random.randint(0,100)
+            lim_sup = random.randint(0,100)
+            filho_1, filho_2 = cruza_individuos(individuo_1, individuo_2, n_cortes)
+            val = aux.converte_individuo(filho_1, ranges)
+            val_2 = aux.converte_individuo(filho_2, ranges)
+            dados.append(max([val[0], val_2[0]]))
+            
+
+
+        desvios_padrao.append((np.std(dados))/((100-(-100))/2))
+        medias.append(np.mean(dados))
+        sup.append(np.mean(dados)+np.std(dados))
+        inf.append(np.mean(dados)-np.std(dados))
+        #dados_gerais.append(dados)
+
+
+        val_filho_1 = aux.converte_individuo(filho_1, ranges)
+        val_filho_2 = aux.converte_individuo(filho_2, ranges)
+    max_std = max(desvios_padrao)
+    max_std_index = desvios_padrao.index(max_std)
+    return [n_cortes__,cortes[max_std_index]]
+
+import matplotlib.pyplot as plt
+
+"""values = []
+for i in range(5, 30):
+    values.append(get_best_desvio(i))
+    print(i, values[-1])
+print(values)
+x = [i[0] for i in values]
+y = [i[1] for i in values]"""
+x = [5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
+y = [2,2,2,2,2,2,3,3,3,3,3,4,4,4,5,5,5,6,6,6,6,6,7,7,7]
+
+plt.plot(x, y)
+plt.xlabel('Número de bits')
+plt.ylabel('Melhor número de cortes')
+#plt.plot(cortes, medias)
+#plt.plot(cortes, sup)
+#plt.plot(cortes, inf)
+"""for i in range(len(dados_gerais)):
+    #scartter plot
+    for j in range(len(dados_gerais[i])):
+        plt.scatter(cortes[i], dados_gerais[i][j], color='black', alpha=0.5)"""
+#plt.xlabel('Número de cortes')
+#plt.ylabel('Desvio padrão dos indivíduos')
+plt.show()

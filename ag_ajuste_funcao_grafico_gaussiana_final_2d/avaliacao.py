@@ -82,7 +82,16 @@ table_s2 = [[1.00, -2.861030, -2.904236, -2.90461],
 """x = [i/20 for i in range(0, 50)]
 y = [potential(6.6282, 1.3941, 1.1352, 3.5231, x[i]) for i in range(len(x))]
 
-plt.plot(x, y, 'o', color='black')
+plt.plot(x, y, 'o', color='blue')
 #plt.plot(x, y_other, 'o', color='red')
-plt.show()"""
+#xlabel
+plt.xlabel('x')
+#ylabel('x')
+plt.ylabel('f(x)')
+#title
+plt.title('Pontos para ajuste de curva')
 
+
+plt.show()
+
+"""

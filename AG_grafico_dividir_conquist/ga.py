@@ -107,4 +107,4 @@ class GA(Dados):
         plt.show()"""
         print("Melhor indivíduo: ", self.best_evaluation)
 
-ga = GA(20, mudar_limites = False)
+#ga = GA(20, mudar_limites = False)

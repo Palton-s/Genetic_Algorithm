@@ -32,6 +32,10 @@ class GA(Dados):
         dados_geracao = []
         avaliacoes = []
         dados_grafico_limites = []
+
+        with open("./dados_geracao.json", "w") as file:
+                file.write("[]")
+
         for i in range(self.n_geracoes):
             #time.sleep(1)
             # avalia a população
@@ -74,8 +78,10 @@ class GA(Dados):
                 self.taxa_de_mutacao = 0.5 # taxa de mutação
                 self.intensidade_da_mutacao = 0.5 # intensidade da mutação"""
             if mudar_limites and i % self.mudanca_limites == 0 and i != 0:
-                min_ranges = [1+1000/(i/2), 1+1000/(i/2)]
-                max_ranges = [250/(i/3), 250/(i/3)]
+                """min_ranges = [1+1000/(i/2), 1+1000/(i/2)]
+                max_ranges = [250/(i/3), 250/(i/3)]"""
+                min_ranges = [0.0005,0.0005,0.0005,0.0005]
+                max_ranges = [10,10,10,10]
                 """for m in range(self.NV):
                     min_ranges.append(100)
                     max_ranges.append(500)"""
@@ -117,13 +123,13 @@ class GA(Dados):
                     values[k], self.limites, self.n_bits) for k in range(self.N)]
             
             average_evaluate = np.mean(Y[-int(len(Y)/2)])
-            # read json './dados_grafico_evolucao.json'
-            json_data = self.readJSON("./dados_geracao.json")
-            individuos___ = aux.converte_populacao(X[-50:], self.limites)
-            for m in range(len(individuos___)):
-                individuos___[m] = sorted(individuos___[m])
-            json_data.append([i, self.limites, aux.converte_populacao(X[-50:], self.limites), Y[-50:]])
-            self.saveJSON(json_data, './dados_geracao.json')
+            
+            #json_data = self.readJSON("./dados_geracao.json")
+            #individuos___ = aux.converte_populacao(X[-50:], self.limites)
+            #for m in range(len(individuos___)):
+            #    individuos___[m] = sorted(individuos___[m])
+            #json_data.append([i, self.limites, aux.converte_populacao(X[-50:], self.limites), Y[-50:]])
+            #self.saveJSON(json_data, './dados_geracao.json')
             print("Geração: " + str(i) + " - Media ava: " + str(average_evaluate) + " - Melhor: " + str(round(Y[-1], 6)) + " - Valores: " + str([round(value, 6) for value in aux.converte_individuo(X[-1], self.limites)])+ ' - Limites: '+str(self.limites))
             # write on file "grafico_convergencia.csv"
 
@@ -320,11 +326,13 @@ class GA(Dados):
 
         for i in range(n_param):
             plt.plot(geracoes, limites_inferiores[i], label="limite inferior "+str(i), color="red")
-            plt.plot(geracoes, limites_superiores[i], label="limite superior "+str(i), color="red")
+            plt.plot(geracoes, limites_superiores[i], label="limite superior "+str(i), color="green")
             for j in range(n_individuos):
                 individuo = [parametros[i][k][j] for k in range(n_geracoes)]
                 plt.plot(geracoes, individuo, color="blue", alpha=0.2)
             plt.legend()
+            plt.xlabel("Gerações")
+            plt.ylabel("Valores")
             plt.show()
         avaliacoes = [data[i][3] for i in range(len(data))]
         individuo_avaliacoes = []
@@ -337,7 +345,63 @@ class GA(Dados):
         plt.xlabel("Geração")
         plt.ylabel("Avaliação")
         plt.show()
-ga = GA(150, mudar_limites=True)
 
-ga.plot_convergencia()
+
+        
+
+
+
+
+
+#ga = GA(400, mudar_limites=True)
+
+#ga.plot_convergencia()
 #ga.plot_result()
+testes = [False, True]
+dados = []
+for i in range(2):
+    ga = GA(400, mudar_limites=testes[i])
+    dados.append(ga.values)
+
+
+# plot scarter two graphs side by side
+fig, (ax1, ax2) = plt.subplots(1, 2)
+#subtitulo
+ax1.set_title("Algoritmo genético convencional")
+ax2.set_title("Algoritmo genético com mudança de limites")
+#plot
+ax1_data_x = [dados[0][i][0] for i in range(len(dados[0]))]
+ax1_data_y = [dados[0][i][1] for i in range(len(dados[0]))]
+ax1.scatter(ax1_data_x, ax1_data_y, color="black", alpha=0.2)
+ax1.set_xlabel("x")
+ax1.set_ylabel("y")
+ax2_data_x = [dados[1][i][0] for i in range(len(dados[1]))]
+ax2_data_y = [dados[1][i][1] for i in range(len(dados[1]))]
+ax2.scatter(ax2_data_x, ax2_data_y, color="black", alpha=0.2)
+ax2.set_xlabel("x")
+ax2.set_ylabel("y")
+"""plt.xlim(-1, 1)
+    plt.ylim(-1, 1)"""
+plt.xlim(-10, 10)
+plt.ylim(-10, 10)
+plt.show()
+
+    
+
+    
+
+
+
+
+
+def plot_scarter(self):
+    valores = self.values
+    x = [valores[i][0] for i in range(len(valores))]
+    y = [valores[i][1] for i in range(len(valores))]
+    # plot scarter from -1 to 1
+    plt.scatter(x, y, alpha=0.2, color="black")
+    #ajust zoom to -1 to 1
+    plt.xlim(-1, 1)
+    plt.ylim(-1, 1)
+    plt.show()
+

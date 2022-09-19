@@ -1,0 +1,2 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/xampp/htdocs/Genetic_Algorithm/manim visualizações/media/videos/dividir/480p15/partial_movie_files/dividir_conq/3680823526_787211222_2596934145.mp4'

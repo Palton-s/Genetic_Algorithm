@@ -2,12 +2,13 @@ import re
 import threading
 from ga import GA
 import datetime
-
+import json
+import numpy as np
 #ranges = [[2.5, 3.125], [0.0, 0.3125], [-0.625, 0.0], [0.0, 0.625], [0.125, 0.25]]
 #ranges = [[-10,10],[-10,10],[-10,10],[-10,10],[-10,10]]
 #ranges = [[-100,100],[0,10],[-100,100],[-100,100],[0,10]]
 #ranges = [[5/6,2.5],[5/6,2.5]]
-ranges = [[0,128],[1,128],[0,128]]
+
 
 def add_and_reorder(data, divisor,file_name, reverse):
 
@@ -53,29 +54,55 @@ def add_and_reorder(data, divisor,file_name, reverse):
                         limites_var.append([limites[4][0]+m*(limites[4][1]-limites[4][0])/spaces,limites[4][0]+(m+1)*(limites[4][1]-limites[4][0])/spaces])
                         ranges.append(limites_var)
     return ranges"""
+
+
+
+
+
+
+
+
+
+def add_and_reorder_json(file_name, data):
+    #read json file_name
+    with open(file_name, "r") as f:
+        json_data = json.load(f)
+    # add data to json_data
+    json_data.append(data)
+    # sort json_data by [0] from bigger to smaller
+    #json_data = sorted(json_data, key=lambda x: x[0], reverse=True)
+    # save json_data on file_name
+    with open(file_name, "w") as f:
+        json.dump(json_data, f)
+    return json_data
+
+def get_best_limits(file_name):
+    #read json file_name
+    with open(file_name, "r") as f:
+        json_data = json.load(f)
+    limites = []
+    # order json_data by [0]
+    json_data = sorted(json_data, key=lambda x: x[0], reverse=True)
+    # get the 5 first elements of json_data
+    bests = json_data[:2]
+    limites = [[min(bests[j][1][i][0] for j in range(len(bests))), max(bests[j][1][i][1] for j in range(len(bests)))] for i in range(len(json_data[0][1]))]
+    return limites
+
 def limites_espalhamento(limites, spaces):
     ranges = []
     # ranges = [[[-1000,0,],[-1000,0,],[-1000,0],[-1000,0],[-1000,0]],[[0,1000],[0,1000],[0,1000],[0,1000],[0,1000]],[[-1000,0],[-1000,0],[-1000,0],[-1000,0],[-1000,0]],[[0,1000],[0,1000],[0,1000],[0,1000],[0,1000]],[[-1000,0],[-1000,0],[-1000,0],[-1000,0],[-1000,0]],[[0,1000],[0,1000],[0,1000],[0,1000],[0,1000]]]
     for i in range(spaces):
         for j in range(spaces):
-            for m in range(spaces):
-                limites_var = []
-                limites_var.append([limites[0][0]+i*(limites[0][1]-limites[0][0])/spaces,limites[0][0]+(i+1)*(limites[0][1]-limites[0][0])/spaces])
-                limites_var.append([limites[1][0]+j*(limites[1][1]-limites[1][0])/spaces,limites[1][0]+(j+1)*(limites[1][1]-limites[1][0])/spaces])
-                limites_var.append([limites[2][0]+m*(limites[2][1]-limites[2][0])/spaces,limites[2][0]+(m+1)*(limites[2][1]-limites[2][0])/spaces])
-                ranges.append(limites_var)
+            limites_var = []
+            limites_var.append([limites[0][0]+i*(limites[0][1]-limites[0][0])/spaces,limites[0][0]+(i+1)*(limites[0][1]-limites[0][0])/spaces])
+            limites_var.append([limites[1][0]+j*(limites[1][1]-limites[1][0])/spaces,limites[1][0]+(j+1)*(limites[1][1]-limites[1][0])/spaces])
+            ranges.append(limites_var)
     return ranges
-
 
 def executa_ga(geracoes, limite,avaliacoes, melhores_valores):
     ga = GA(geracoes, limite)
     avaliacoes.append(ga.avaliacoes)
     melhores_valores.append(ga.melhores_valores)
-    
-    
-        
-
-
 
 inicio_da_execucao = datetime.datetime.now()
 def exec_thread(limites, n_geracoes):
@@ -93,8 +120,12 @@ def exec_thread(limites, n_geracoes):
         thread.start()
     for thread in threads:
         thread.join()
-    
-    #add_and_reorder(avaliacoes, " -------- ", "testesss.log", True)
+    limites_avaliacoes = []
+    for i in range(len(limites)):
+        limites_avaliacoes.append([avaliacoes[i][-1][0], limites[i]])
+    for lim__ in limites_avaliacoes:
+        add_and_reorder_json("avaliacoes_doms.json", lim__)
+    """#add_and_reorder(avaliacoes, " -------- ", "testesss.log", True)
 
     # order avaliacoes by best_evaluation
     avaliacoes.sort(key=lambda x: x[0])
@@ -110,11 +141,12 @@ def exec_thread(limites, n_geracoes):
     with open("esp_dom.log", "a") as f:
         f.write("Tempo de execução: "+str(tempo_execucao)+" segundos\n")
         f.write("----------------------\n")
-    return [avaliacoes, melhores_valores]
+    return [avaliacoes, melhores_valores]"""
 
 import matplotlib.pyplot as plt
 import random
 
+ranges = [[-2,2],[-2,2]]
 limites = limites_espalhamento(ranges,3)
 #limites = [[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]]]
 half_len = int(len(limites)/2)
@@ -124,7 +156,9 @@ while True:
     n_geracoes = 5
     #avaliacoes += exec_thread(limites,n_geracoes)
     thr = exec_thread(limites,n_geracoes)
-    avaliacoes += thr[0]
+    ranges = get_best_limits("avaliacoes_doms.json")
+    limites = limites_espalhamento(ranges,4)
+"""    avaliacoes += thr[0]
     melhores_individuos = thr[1]
     todos_inds = []
     todos_inds_values = []
@@ -146,8 +180,8 @@ while True:
         for individuo in subdivisao:
             legend = "individuo "+str(j)
             values_plot = todos_inds_values[i][j]
-            """var_1 = [values_plot[k][0] for k in range(len(values_plot))]
-            var_2 = [values_plot[k][1] for k in range(len(values_plot))]"""
+            #var_1 = [values_plot[k][0] for k in range(len(values_plot))]
+            #var_2 = [values_plot[k][1] for k in range(len(values_plot))]
             plt.plot(individuo, color=color, linewidth=0.5, alpha=0.7)
     # x axis
     plt.xlabel("Nº da geração")
@@ -157,4 +191,4 @@ while True:
             
         
 
-    print("avaliacoes")
+    print("avaliacoes")"""
