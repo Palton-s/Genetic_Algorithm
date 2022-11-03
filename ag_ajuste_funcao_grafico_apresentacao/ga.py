@@ -34,6 +34,7 @@ class GA(Dados):
         avaliacoes = []
         dados_grafico_limites = []
         convergencia_count = 1
+        self.valores = []
         for i in range(self.n_geracoes):
             #time.sleep(1)
             # avalia a população
@@ -65,7 +66,7 @@ class GA(Dados):
             # realiza cruzamentos entre esses indivíduos
             filhos = crossover.cruza_populacao(
                 melhores, self.n_cortes_no_cruzamento)
-
+            
             if i != self.n_geracoes-1:
                 # realiza mutação nos filhos
                 filhos = mutacao.mut_pop(
@@ -134,6 +135,7 @@ class GA(Dados):
             json_data.append([i, self.limites, aux.converte_populacao(X[-50:], self.limites), sorted(Y[-50:])])
             self.saveJSON(json_data, './dados_geracao.json')
             print("Geração: " + str(i) + " - Media ava: " + str(average_evaluate) + " - Melhor: " + str(round(Y[-1], 6)) + " - Valores: " + str([round(value, 6) for value in aux.converte_individuo(X[-1], self.limites)])+ ' - Limites: '+str(self.limites))
+            self.valores.append(aux.converte_populacao(X, self.limites))
             # write on file "grafico_convergencia.csv"
 
             # now = time.time()
@@ -408,6 +410,7 @@ class GA(Dados):
         plt.ylabel("Avaliação")
         plt.show()
 ga = GA(80, mudar_limites=True)
+print("jaja")
 
-ga.plot_convergencia()
-ga.plot_result()
+#ga.plot_convergencia()
+#ga.plot_result()

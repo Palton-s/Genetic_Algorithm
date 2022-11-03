@@ -70,7 +70,7 @@ def add_and_reorder_json(file_name, data):
     # add data to json_data
     json_data.append(data)
     # sort json_data by [0] from bigger to smaller
-    #json_data = sorted(json_data, key=lambda x: x[0], reverse=True)
+    json_data = sorted(json_data, key=lambda x: x[0], reverse=True)
     # save json_data on file_name
     with open(file_name, "w") as f:
         json.dump(json_data, f)
@@ -84,7 +84,8 @@ def get_best_limits(file_name):
     # order json_data by [0]
     json_data = sorted(json_data, key=lambda x: x[0], reverse=True)
     # get the 5 first elements of json_data
-    bests = json_data[:2]
+    #bests = [json_data[0]]
+    bests = json_data[0:3]
     limites = [[min(bests[j][1][i][0] for j in range(len(bests))), max(bests[j][1][i][1] for j in range(len(bests)))] for i in range(len(json_data[0][1]))]
     return limites
 
@@ -146,18 +147,46 @@ def exec_thread(limites, n_geracoes):
 import matplotlib.pyplot as plt
 import random
 
-ranges = [[-2,2],[-2,2]]
-limites = limites_espalhamento(ranges,3)
+ranges = [[-6,2],[-6,2]]
+limites = limites_espalhamento(ranges,4)
 #limites = [[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]],[[-2.5,2.5],[-2.5,2.5]]]
 half_len = int(len(limites)/2)
-while True:
+best_limits_for_graph = [ranges]
+jaja = True
+for i in range(10):
     avaliacoes_finais = []
     avaliacoes = []
-    n_geracoes = 5
+    n_geracoes = 3
     #avaliacoes += exec_thread(limites,n_geracoes)
     thr = exec_thread(limites,n_geracoes)
     ranges = get_best_limits("avaliacoes_doms.json")
+    best_limits_for_graph.append(ranges)
     limites = limites_espalhamento(ranges,4)
+
+#plot line limites[i][0]
+
+print(best_limits_for_graph)
+var_1 = [best_limits_for_graph[i][0] for i in range(len(best_limits_for_graph))]
+var_2 = [best_limits_for_graph[i][1] for i in range(len(best_limits_for_graph))]
+
+line_inf_var_1 = [var_1[i][0] for i in range(len(var_1))]
+line_sup_var_1 = [var_1[i][1] for i in range(len(var_1))]
+line_inf_var_2 = [var_2[i][0] for i in range(len(var_2))]
+line_sup_var_2 = [var_2[i][1] for i in range(len(var_2))]
+
+
+# plot var1 lines
+plt.plot(line_inf_var_1, color='red', label='Limite inferior x')
+plt.plot(line_sup_var_1, color='green', label='Limite superior x')
+plt.show()
+# plot var2 lines
+plt.plot(line_inf_var_2, color='red', label='Limite inferior y')
+plt.plot(line_sup_var_2, color='green', label='Limite superior y')
+plt.show()
+
+
+
+
 """    avaliacoes += thr[0]
     melhores_individuos = thr[1]
     todos_inds = []

@@ -77,51 +77,50 @@ class GA(Dados):
             """if Y[-1] < 0.01:
                 self.taxa_de_mutacao = 0.5 # taxa de mutação
                 self.intensidade_da_mutacao = 0.5 # intensidade da mutação"""
+
+
+
+
+
+            # Se a mudança de limites estiver ativada e a geração de self.mudanca_limites
             if mudar_limites and i % self.mudanca_limites == 0 and i != 0:
-                """min_ranges = [1+1000/(i/2), 1+1000/(i/2)]
-                max_ranges = [250/(i/3), 250/(i/3)]"""
+                # Define as larguras mínimas e máximas de cada domínio
                 min_ranges = [0.0005,0.0005,0.0005,0.0005]
                 max_ranges = [10,10,10,10]
-                """for m in range(self.NV):
-                    min_ranges.append(100)
-                    max_ranges.append(500)"""
-                
-                limites_moveis = []
-                for m in range(self.NV):
-                    limites_moveis.append(True)
-
-                X, Y = aux.ordena(X, Y)
-                #selected_values = aux.converte_populacao(elite, self.limites)
-                selected_values = aux.converte_populacao(X[-20:],self.limites)
-                values = aux.converte_populacao(X, self.limites)
-                #self.write_on_file("Geração: " + str(i) + " - Melhor: " + str(Y[-1]) + " - Valores: " + str(values[-1]) + " - Limites: " + str(self.limites))
-                average_evaluate = np.mean(Y[-int(len(Y)/2)])
-                #print("Geração: " + str(i) + " - Melhor: " + str(round(Y[-1], 2)) + " - Valores: " + str([round(value, 2) for value in aux.converte_individuo(X[-1], self.limites)]))
-                biggest_value = [max([selected_values[i][j] for i in range(
-                    len(selected_values))]) for j in range(self.NV)]
-                smallest_value = [min([selected_values[i][j] for i in range(
-                    len(selected_values))]) for j in range(self.NV)]
-
+                # Define as dimensões que serão convergidas
+                limites_moveis = [True, True, True, True]
+                # Seleciona os 20 melhores indivíduos
+                selected_values = aux.converte_populacao(X[-20:],self.limites)     
+                # Resgata os maiores e menores valores de cada variável
+                biggest_value = [max([selected_values[i][j] for i in range(len(selected_values))]) for j in range(self.NV)]
+                smallest_value = [min([selected_values[i][j] for i in range(len(selected_values))]) for j in range(self.NV)]
+                # Para cada variável
                 for k in range(self.NV):
+                    # Se a variável for convergível
                     if limites_moveis[k]:
-                        if smallest_value[k] == biggest_value[k]:
-                            smallest_value[k] = smallest_value[k] - \
-                                abs(0.1*smallest_value[k])
-                            biggest_value[k] = biggest_value[k] + \
-                                abs(0.1*biggest_value[k])
+                        # Calcula a diferença entre o maior e o menor valor                        
                         range_ = biggest_value[k] - smallest_value[k]
-                        if biggest_value[k] - smallest_value[k] < min_ranges[k]:
+                        # Se a diferença for menor que o mínimo valor do domínio
+                        if range_ < min_ranges[k]:
+                            # Ajusta o domínio para o centro dos valores com a largura mínima
                             smallest_value[k] = (smallest_value[k] + biggest_value[k])/2 - min_ranges[k]/2
                             biggest_value[k] = (smallest_value[k] + biggest_value[k])/2 + min_ranges[k]/2
-                        if biggest_value[k] - smallest_value[k] > max_ranges[k]:
+                        # Se a diferença for maior que o máximo valor do domínio
+                        if range_ > max_ranges[k]:
+                            # Ajusta o domínio para valores com a largura máxima
                             smallest_value[k] = (smallest_value[k] + biggest_value[k])/2 - max_ranges[k]/2
                             biggest_value[k] = (smallest_value[k] + biggest_value[k])/2 + max_ranges[k]/2
-                        
-                        self.change_limites(
-                            k, smallest_value[k]-abs(0.05*range_), biggest_value[k]+abs(0.05*range_))
-                X = [aux.desconverve_individuo(
-                    values[k], self.limites, self.n_bits) for k in range(self.N)]
-            
+                        # Altera o domínio de busca
+                        self.change_limites(k, smallest_value[k]-abs(0.05*range_), biggest_value[k]+abs(0.05*range_))
+                # Refaz os cromossomos para os novos domínios
+                # Traduz os cromossomos para os valores reais
+                values = aux.converte_populacao(X, self.limites)    
+                X = [aux.desconverve_individuo(values[k], self.limites, self.n_bits) for k in range(self.N)]
+            # Segue com o algoritmo
+
+
+
+
             average_evaluate = np.mean(Y[-int(len(Y)/2)])
             
             #json_data = self.readJSON("./dados_geracao.json")
@@ -130,7 +129,7 @@ class GA(Dados):
             #    individuos___[m] = sorted(individuos___[m])
             #json_data.append([i, self.limites, aux.converte_populacao(X[-50:], self.limites), Y[-50:]])
             #self.saveJSON(json_data, './dados_geracao.json')
-            print("Geração: " + str(i) + " - Media ava: " + str(average_evaluate) + " - Melhor: " + str(round(Y[-1], 6)) + " - Valores: " + str([round(value, 6) for value in aux.converte_individuo(X[-1], self.limites)])+ ' - Limites: '+str(self.limites))
+            #print("Geração: " + str(i) + " - Media ava: " + str(average_evaluate) + " - Melhor: " + str(round(Y[-1], 6)) + " - Valores: " + str([round(value, 6) for value in aux.converte_individuo(X[-1], self.limites)])+ ' - Limites: '+str(self.limites))
             # write on file "grafico_convergencia.csv"
 
             # now = time.time()

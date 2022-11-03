@@ -1,0 +1,2 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Users/palto/OneDrive/Documentos/Genetic_Algorithm/manim visualizações/media/videos/convergencia/480p15/partial_movie_files/Scarter/2231742644_1637668911_2358810818.mp4'
